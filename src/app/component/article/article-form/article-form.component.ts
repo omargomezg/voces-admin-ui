@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ArticleService} from "../../../shared/service/article.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {configuration} from "../../../shared/constant/configuration";
 import {Editor} from "ngx-editor";
 
@@ -12,10 +12,15 @@ import {Editor} from "ngx-editor";
 })
 export class ArticleFormComponent implements OnInit, OnDestroy {
 
-  sites = configuration.sites;
+  sites = configuration.sites.map(site => {
+    return {
+      name: site,
+      value: site
+    }
+  });
   authors = configuration.authors;
   statuses = configuration.statuses;
-  editor: Editor  = new Editor();
+  editor: Editor = new Editor();
   html: '' | undefined;
 
   articleForm = this.fb.group({
@@ -25,6 +30,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     content: ['', Validators.required],
     referringSite: [''],
     principalSite: ['', Validators.required],
+    featureImage: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
     author: this.fb.group({
       alias: [''],
       email: ['']
@@ -78,6 +84,10 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   cancel(): void {
     this.router.navigateByUrl('/article');
+  }
+
+  delete(): void {
+
   }
 
 }

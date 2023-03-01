@@ -3,14 +3,19 @@
     <div class="row mb-2">
       <div class="col">
         <button class="btn btn-sm btn-link me-1" (click)="cancel()">Cancelar</button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="save()" [disabled]="!articleForm.valid">Guardar como borrador</button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="hidden()" [disabled]="!articleForm.valid">Ocultar</button>
+        <button class="btn btn-sm btn-secondary me-1" (click)="save()" [disabled]="!articleForm.valid">Guardar como
+          borrador
+        </button>
+        <button class="btn btn-sm btn-secondary me-1" (click)="hidden()" [disabled]="!articleForm.valid">Ocultar
+        </button>
+        <button class="btn btn-sm btn-secondary me-1" (click)="delete()" [disabled]="!articleForm.valid">Eliminar
+        </button>
         <button class="btn btn-sm btn-primary" (click)="publish()" [disabled]="!articleForm.valid">Publicar</button>
       </div>
     </div>
   </div>
   <div class="row mt-1">
-    <div class="col-sm-10">
+    <div class="col-lg-9">
       <div class="mb-3">
         <label for="title" class="form-label">Titulo</label>
         <input type="text" class="form-control" id="title" name="title" formControlName="title">
@@ -18,8 +23,8 @@
       </div>
       <div class="mb-3">
         <div class="NgxEditor__Wrapper">
-          <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-          <ngx-editor [editor]="editor" formControlName="content"  [placeholder]="'Escribe algo...'"></ngx-editor>
+          <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+          <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Escribe algo...'"></ngx-editor>
         </div>
       </div>
       <div class="mb-3">
@@ -29,12 +34,12 @@
                formControlName="referringSite">
       </div>
     </div>
-    <div class="col-sm-2">
+    <div class="col-lg-3">
 
       <div class="mb-3">
         <label for="principalSite" class="form-label">Sitio principal</label>
-        <select class="form-select" id="principalSite" name="principalSite" formControlName="principalSite">
-          <option *ngFor="let site of sites">{{site}}</option>
+        <select class="form-select" id="principalSite" #principalSite name="principalSite" formControlName="principalSite">
+          <option *ngFor="let site of sites">{{site.name}}</option>
         </select>
       </div>
       <div class="mb-3" formGroupName="author">
@@ -48,7 +53,13 @@
         <textarea type="text" class="form-control" id="summary" name="summary"
                   formControlName="summary"> </textarea>
       </div>
+      <div class="mb-3">
+        <h5>Imagen destacada</h5>
+        <img [src]="articleForm.controls['featureImage'].value" class="img-fluid">
+      </div>
     </div>
   </div>
 
 </form>
+
+{{articleForm.value | json}}
