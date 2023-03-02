@@ -8,12 +8,14 @@ import { ArticleFormComponent } from './component/article/article-form/article-f
 import {HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
 import { NgxEditorModule } from 'ngx-editor';
+import { HeaderComponent } from './component/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ArticleTableComponent,
-    ArticleFormComponent
+    ArticleFormComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

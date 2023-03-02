@@ -22,4 +22,7 @@ export class ArticleTableComponent implements OnInit {
   open(id: string): void {
     this.router.navigateByUrl('/article/' + id);
   }
+
+  addNewArticle(): void {this.router.navigateByUrl('/article/create');
+  }
 }

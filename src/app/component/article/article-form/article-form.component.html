@@ -1,16 +1,18 @@
 <form [formGroup]="articleForm">
   <div class="sticky-top border-bottom bg-body text-end">
-    <div class="row mb-2">
+    <div class="row">
       <div class="col">
-        <button class="btn btn-sm btn-link me-1" (click)="cancel()">Cancelar</button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="save()" [disabled]="!articleForm.valid">Guardar como
-          borrador
-        </button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="hidden()" [disabled]="!articleForm.valid">Ocultar
-        </button>
-        <button class="btn btn-sm btn-secondary me-1" (click)="delete()" [disabled]="!articleForm.valid">Eliminar
-        </button>
-        <button class="btn btn-sm btn-primary" (click)="publish()" [disabled]="!articleForm.valid">Publicar</button>
+        <div class="mb-2 mt-2">
+          <button class="btn btn-sm btn-link me-1" (click)="cancel()">Cancelar</button>
+          <button class="btn btn-sm btn-secondary me-1" (click)="save()" [disabled]="!articleForm.valid">Guardar como
+            borrador
+          </button>
+          <button class="btn btn-sm btn-secondary me-1" (click)="hidden()" [disabled]="!articleForm.valid">Ocultar
+          </button>
+          <button class="btn btn-sm btn-secondary me-1" (click)="delete()" [disabled]="!articleForm.valid">Eliminar
+          </button>
+          <button class="btn btn-sm btn-primary" (click)="publish()" [disabled]="!articleForm.valid">Publicar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +40,8 @@
 
       <div class="mb-3">
         <label for="principalSite" class="form-label">Sitio principal</label>
-        <select class="form-select" id="principalSite" #principalSite name="principalSite" formControlName="principalSite">
+        <select class="form-select" id="principalSite" #principalSite name="principalSite"
+                formControlName="principalSite">
           <option *ngFor="let site of sites">{{site.name}}</option>
         </select>
       </div>
