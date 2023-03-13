@@ -1,4 +1,4 @@
-export interface AuthorModel {
-  alias: string;
-  email: string;
+export class AuthorModel {
+  alias!: string;
+  email!: string;
 }

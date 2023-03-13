@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ArticleService} from "../../../shared/service/article.service";
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {configuration} from "../../../shared/constant/configuration";
 import {Editor} from "ngx-editor";
+import {ArticleModel} from "../../../shared/model/article.model";
 
 @Component({
   selector: 'app-article-form',
@@ -29,8 +30,9 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     summary: [''],
     content: ['', Validators.required],
     referringSite: [''],
-    principalSite: ['', Validators.required],
+    principalSite: [configuration.sites[0], Validators.required],
     featureImage: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
+    status: ['DRAFT'],
     author: this.fb.group({
       alias: [''],
       email: ['']
@@ -43,7 +45,8 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.loadArticle(params['id']);
+      if (params['id'])
+        this.loadArticle(params['id']);
     });
   }
 
@@ -74,6 +77,9 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
+    this.articleService.create(this.articleForm.value as ArticleModel).subscribe(result => {
+      console.log(result)
+    });
   }
 
   publish(): void {
@@ -90,4 +96,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   }
 
+  setPermalink(event: any) {
+    this.createPermalink(event.target.value)
+  }
 }

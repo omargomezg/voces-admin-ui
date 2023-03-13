@@ -20,7 +20,8 @@
     <div class="col-lg-9">
       <div class="mb-3">
         <label for="title" class="form-label">Titulo</label>
-        <input type="text" class="form-control" id="title" name="title" formControlName="title">
+        <input type="url" class="form-control" id="title" name="title" (change)="setPermalink($event)"
+               formControlName="title">
         <div class="form-text">URL: {{articleForm.controls['permalink'].value}}</div>
       </div>
       <div class="mb-3">

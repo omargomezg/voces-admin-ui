@@ -1,12 +1,17 @@
 import {AuthorModel} from "./author.model";
 
-export interface ArticleModel {
-  id: string;
-  title: string;
-  content: string;
-  summary: string;
-  createdAt: Date;
+export class ArticleModel {
+  id!: string;
+  title!: string;
+  content!: string;
+  summary!: string;
   updatedAt: Date;
-  referringSite: string;
+  referringSite!: string;
   author: AuthorModel;
+
+  constructor() {
+    this.updatedAt = new Date();
+    this.author = new AuthorModel();
+  }
+
 }

@@ -20,6 +20,10 @@ export class ArticleService {
     return this.httpClient.get<ArticleModel>(this.path +  "/" + id);
   }
 
+  create(article: ArticleModel): Observable<ArticleModel>{
+    return this.httpClient.post<ArticleModel>(this.path, article);
+  }
+
 
 
 }
