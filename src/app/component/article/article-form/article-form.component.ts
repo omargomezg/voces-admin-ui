@@ -5,6 +5,11 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {configuration} from "../../../shared/constant/configuration";
 import {Editor} from "ngx-editor";
 import {ArticleModel} from "../../../shared/model/article.model";
+import {ToastrService} from "ngx-toastr";
+import {AuthorService} from "../../../shared/service/author.service";
+import {AuthorModel} from "../../../shared/model/author.model";
+import {MatDialog} from "@angular/material/dialog";
+import {AuthorFormComponent} from "../../author/author-form/author-form.component";
 
 @Component({
   selector: 'app-article-form',
@@ -19,12 +24,13 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
       value: site
     }
   });
-  authors = configuration.authors;
+  authors: AuthorModel[] = [];
   statuses = configuration.statuses;
   editor: Editor = new Editor();
   html: '' | undefined;
 
   articleForm = this.fb.group({
+    id: [''],
     title: ['', Validators.required],
     permalink: ['', Validators.required],
     summary: [''],
@@ -34,13 +40,17 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     featureImage: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
     status: ['DRAFT'],
     author: this.fb.group({
-      alias: [''],
-      email: ['']
+      id: ['', Validators.required]
     })
   });
 
-  constructor(private route: ActivatedRoute, private articleService: ArticleService, private fb: FormBuilder, private router: Router) {
+  constructor(private route: ActivatedRoute, private articleService: ArticleService, private fb: FormBuilder,
+              private router: Router,
+              private toastrService: ToastrService,
+              private authorService: AuthorService,
+              public dialog: MatDialog) {
     //TODO Set author from user session
+    this.loadAuthors();
   }
 
   ngOnInit(): void {
@@ -56,12 +66,17 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   loadArticle(id: string): void {
     this.articleService.findById(id).subscribe(article => {
+      this.articleForm.controls["id"].setValue(article.id);
       this.articleForm.controls["title"].setValue(article.title);
       this.articleForm.controls["content"].setValue(article.content);
       this.articleForm.controls["summary"].setValue(article.summary);
       this.articleForm.controls["referringSite"].setValue(article.referringSite);
       this.createPermalink(article.title);
     })
+  }
+
+  loadAuthors(): void{
+    this.authorService.getAll().subscribe(authors => this.authors = authors);
   }
 
   createPermalink(title: string): void {
@@ -77,9 +92,12 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-    this.articleService.create(this.articleForm.value as ArticleModel).subscribe(result => {
+    this.articleService.create(this.articleForm.value as ArticleModel).subscribe(
+      result => {
       console.log(result)
-    });
+    }, error => {
+        this.toastrService.error("Ups tenemos problemas charlie")
+      });
   }
 
   publish(): void {
@@ -98,5 +116,15 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   setPermalink(event: any) {
     this.createPermalink(event.target.value)
+  }
+
+  openAuthorForm(): void {
+    const dialogRef = this.dialog.open(AuthorFormComponent, {
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadAuthors();
+    });
   }
 }

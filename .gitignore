@@ -44,3 +44,12 @@ Thumbs.db
 
 #custom
 /src/app/shared/constant/configuration.ts
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/

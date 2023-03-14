@@ -46,11 +46,13 @@
           <option *ngFor="let site of sites">{{site.name}}</option>
         </select>
       </div>
-      <div class="mb-3" formGroupName="author">
-        <label for="alias" class="form-label">Autor</label>
-        <select class="form-select" id="alias" name="alias" formControlName="alias">
-          <option *ngFor="let author of authors">{{author.alias}}</option>
+      <div class="input-group mb-3" formGroupName="author">
+        <select class="form-control" id="alias" name="alias" formControlName="id">
+          <option [value]="author.id" *ngFor="let author of authors">{{author.alias}}</option>
         </select>
+        <div class="input-group-append">
+        <button class="btn btn-outline-secondary" (click)="openAuthorForm()" type="button">+ Autor</button>
+      </div>
       </div>
       <div class="mb-3">
         <label for="summary" class="form-label">Extracto</label>
