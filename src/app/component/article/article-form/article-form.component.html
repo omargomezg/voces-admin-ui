@@ -1,17 +1,30 @@
 <form [formGroup]="articleForm">
-  <div class="sticky-top border-bottom bg-body text-end">
+  <div class="border-bottom bg-body text-end" [ngClass]="showingDialog ==true? '': 'sticky-top'">
     <div class="row">
       <div class="col">
         <div class="mb-2 mt-2">
-          <button class="btn btn-sm btn-link me-1" (click)="cancel()">Cancelar</button>
-          <button class="btn btn-sm btn-secondary me-1" (click)="save()" [disabled]="!articleForm.valid">Guardar como
-            borrador
+          <button class="btn btn-sm btn-secondary me-1"
+                  title="Volver"
+                  data-toggle="tooltip" data-placement="bottom" (click)="cancel()">
+            <i class="bi bi-arrow-left-short"></i></button>
+          <button class="btn btn-sm btn-secondary me-1" (click)="save('DRAFT')"
+                  title="Guardar"
+                  data-toggle="tooltip" data-placement="bottom" [disabled]="!articleForm.valid">
+            <i class="bi bi-save"></i>
           </button>
-          <button class="btn btn-sm btn-secondary me-1" (click)="hidden()" [disabled]="!articleForm.valid">Ocultar
+          <button class="btn btn-sm btn-secondary me-1" (click)="save('HIDDEN')"
+                  title="Cambiar a borrador"
+                  *ngIf="articleForm.controls['status'].value !== 'HIDDEN'"
+                  data-toggle="tooltip" data-placement="bottom"
+                  [disabled]="!articleForm.valid">
+            <i class="bi bi-eye-slash"></i>
           </button>
-          <button class="btn btn-sm btn-secondary me-1" (click)="delete()" [disabled]="!articleForm.valid">Eliminar
+          <button class="btn btn-sm btn-secondary me-1"
+                  *ngIf="articleForm.controls['status'].value === 'HIDDEN'"
+                  title="Eliminar articulo"
+                  data-toggle="tooltip" data-placement="bottom" (click)="delete()"><i class="bi bi-trash"></i>
           </button>
-          <button class="btn btn-sm btn-primary" (click)="publish()" [disabled]="!articleForm.valid">Publicar</button>
+          <button class="btn btn-sm btn-primary" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar</button>
         </div>
       </div>
     </div>
@@ -51,21 +64,32 @@
           <option [value]="author.id" *ngFor="let author of authors">{{author.alias}}</option>
         </select>
         <div class="input-group-append">
-        <button class="btn btn-outline-secondary" (click)="openAuthorForm()" type="button">+ Autor</button>
+          <button class="btn btn-outline-secondary" (click)="openAuthorForm()" type="button">+ Autor</button>
+        </div>
       </div>
+      <div class="mb-3">
+        <label for="principalSite" class="form-label">Categoría</label>
+        <select class="form-select" id="category" #category name="category"
+                formControlName="category">
+          <option *ngFor="let site of sites">{{site.name}}</option>
+        </select>
       </div>
       <div class="mb-3">
         <label for="summary" class="form-label">Extracto</label>
-        <textarea type="text" class="form-control" id="summary" name="summary"
+        <textarea type="text" class="form-control" id="summary" name="summary" rows="6"
                   formControlName="summary"> </textarea>
+        <div class="form-text">Un texto opcional asociado a una entrada. La mayoría de las veces se usa como el
+          resumen de la entrada.</div>
+
       </div>
       <div class="mb-3">
         <h5>Imagen destacada</h5>
-        <img [src]="articleForm.controls['featureImage'].value" class="img-fluid">
+        <img [src]="articleForm.controls['featureImage'].value" class="img-thumbnail"
+             (click)="openFileUpload()"
+             alt="Imagen principal">
       </div>
     </div>
   </div>
 
 </form>
 
-{{articleForm.value | json}}

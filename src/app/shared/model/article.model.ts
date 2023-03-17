@@ -7,6 +7,8 @@ export class ArticleModel {
   summary!: string;
   updatedAt: Date;
   referringSite!: string;
+  status!: string;
+  featureImage!: string;
   author: AuthorModel;
 
   constructor() {

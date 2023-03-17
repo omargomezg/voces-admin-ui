@@ -10,6 +10,7 @@ import {AuthorService} from "../../../shared/service/author.service";
 import {AuthorModel} from "../../../shared/model/author.model";
 import {MatDialog} from "@angular/material/dialog";
 import {AuthorFormComponent} from "../../author/author-form/author-form.component";
+import {UploadModalComponent} from "../../file/upload-modal/upload-modal.component";
 
 @Component({
   selector: 'app-article-form',
@@ -26,9 +27,10 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   });
   authors: AuthorModel[] = [];
   statuses = configuration.statuses;
+  filePath = configuration.fileServer;
   editor: Editor = new Editor();
+  showingDialog: boolean;
   html: '' | undefined;
-
   articleForm = this.fb.group({
     id: [''],
     title: ['', Validators.required],
@@ -38,11 +40,13 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     referringSite: [''],
     principalSite: [configuration.sites[0], Validators.required],
     featureImage: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
+    category: [''],
     status: ['DRAFT'],
     author: this.fb.group({
       id: ['', Validators.required]
     })
   });
+  private redirectOnSave: boolean;
 
   constructor(private route: ActivatedRoute, private articleService: ArticleService, private fb: FormBuilder,
               private router: Router,
@@ -50,6 +54,8 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
               private authorService: AuthorService,
               public dialog: MatDialog) {
     //TODO Set author from user session
+    this.showingDialog = false;
+    this.redirectOnSave = true;
     this.loadAuthors();
   }
 
@@ -71,11 +77,18 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
       this.articleForm.controls["content"].setValue(article.content);
       this.articleForm.controls["summary"].setValue(article.summary);
       this.articleForm.controls["referringSite"].setValue(article.referringSite);
+      this.articleForm.controls["status"].setValue(article.status);
+      if (article.featureImage) {
+        this.articleForm.controls["featureImage"].setValue(article.featureImage);
+      }
       this.createPermalink(article.title);
+      if (article.author) {
+        this.articleForm.controls['author'].controls['id'].setValue(article.author.id);
+      }
     })
   }
 
-  loadAuthors(): void{
+  loadAuthors(): void {
     this.authorService.getAll().subscribe(authors => this.authors = authors);
   }
 
@@ -91,19 +104,32 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     this.articleForm.controls["permalink"].setValue(this.statuses[position]);
   }
 
-  save(): void {
-    this.articleService.create(this.articleForm.value as ArticleModel).subscribe(
-      result => {
-      console.log(result)
-    }, error => {
-        this.toastrService.error("Ups tenemos problemas charlie")
-      });
+  save(status: string): void {
+    this.articleForm.controls['status'].setValue(status);
+    if (this.articleForm.controls['id'].value !== '') {
+      this.articleService.update(this.articleForm.value as ArticleModel).subscribe(
+        () => {
+          this.handleSuccessFull();
+        }, error => {
+          this.toastrService.error("Ups tenemos problemas charlie")
+        });
+    } else {
+      this.articleService.create(this.articleForm.value as ArticleModel).subscribe(
+        () => {
+          this.handleSuccessFull();
+        }, error => {
+          this.toastrService.error("Ups tenemos problemas charlie")
+        });
+    }
   }
 
-  publish(): void {
-  }
-
-  hidden(): void {
+  handleSuccessFull() {
+    this.toastrService.success('Articulo actualizado');
+    if (this.redirectOnSave) {
+      this.router.navigateByUrl('/article');
+    } else {
+      this.redirectOnSave = false;
+    }
   }
 
   cancel(): void {
@@ -111,7 +137,16 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   }
 
   delete(): void {
-
+    const title = this.articleForm.get('title')?.value;
+    if (confirm("Primero debes confirmar que quieres eliminar " + title)) {
+      this.articleService.delete(this.articleForm.controls['id'].value as string).subscribe(
+        result => {
+          this.toastrService.success("Articulo eliminado");
+          this.router.navigateByUrl('/article');
+        }, error => {
+          this.toastrService.error("Ups tenemos problemas charlie")
+        });
+    }
   }
 
   setPermalink(event: any) {
@@ -119,12 +154,33 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
   }
 
   openAuthorForm(): void {
+    this.showingDialog = true;
     const dialogRef = this.dialog.open(AuthorFormComponent, {
       data: {},
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.showingDialog = false;
       this.loadAuthors();
+    });
+  }
+
+  openFileUpload() {
+    this.showingDialog = true;
+    const dialogRef = this.dialog.open(UploadModalComponent, {
+      data: {title: 'Imagen destacada'},
+    });
+
+    dialogRef.afterClosed().subscribe(fileName => {
+      let hasId = this.articleForm.controls['id'].value as string !== '';
+      if (fileName) {
+        this.articleForm.controls['featureImage'].setValue(`${this.filePath}/${fileName}`);
+        if(hasId) {
+          this.redirectOnSave = false;
+          this.save(this.articleForm.controls['status'].value as string);
+        }
+      }
+      this.showingDialog = false;
     });
   }
 }

@@ -1,25 +1,29 @@
-<div class="col">
-  <div class="row border-bottom bg-body">
+<h1>Artículos y noticias</h1>
+<div class="row border-bottom bg-body mb-2 pb-1">
+  <div class="col">
     <div class="text-end">
-    <button class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()">Añadir nueva</button></div>
+      <button class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()"><i class="bi bi-plus-square"></i> Añadir
+        nueva
+      </button>
+    </div>
   </div>
 </div>
-<table class="table">
+<table class="table table-hover table-bordered">
   <thead>
   <tr>
-    <th scope="col">#</th>
     <th scope="col">Titulo</th>
     <th scope="col">Autor</th>
     <th scope="col">Fecha</th>
+    <th scope="col">Estado</th>
     <th scope="col">Accion</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let article of articles">
-    <th scope="row">1</th>
     <td>{{article.title}}</td>
     <td>{{article.author ? article.author.alias : ''}}</td>
     <td>{{article.updatedAt | date}}</td>
+    <td>{{article.status}}</td>
     <td>
       <button type="button" class="btn btn-link btn-sm" (click)="open(article.id)">
         <i class="bi bi-pencil-square"></i>
@@ -28,3 +32,20 @@
   </tr>
   </tbody>
 </table>
+<nav *ngIf="articles.length > 1">
+  <ul class="pagination justify-content-end">
+    <li id="prev" class="page-item" [ngClass]="{ 'disabled': options.page === 1 }">
+      <button type="button" class="page-link" (click)="prev()">Anterior</button>
+    </li>
+    <ng-container>
+      <li class="page-item" *ngFor="let number of numbers" [ngClass]="{ 'active': options.page === number }">
+        <button type="button" class="page-link" (click)="to(number)">{{number}}</button>
+      </li>
+    </ng-container>
+    <li id="next" class="page-item" [ngClass]="{ 'disabled': options.page === numbers.length }">
+      <button type="button" class="page-link" (click)="next()" [disabled]="options.page === numbers.length">Siguiente
+      </button>
+    </li>
+  </ul>
+</nav>
+

@@ -14,6 +14,9 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { AuthorFormComponent } from './component/author/author-form/author-form.component';
 import { AuthorTableComponent } from './component/author/author-table/author-table.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { UploadModalComponent } from './component/file/upload-modal/upload-modal.component';
+import {MatButtonModule} from "@angular/material/button";
+import { FooterComponent } from './component/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -22,18 +25,21 @@ import {MatDialogModule} from "@angular/material/dialog";
     ArticleFormComponent,
     HeaderComponent,
     AuthorFormComponent,
-    AuthorTableComponent
+    AuthorTableComponent,
+    UploadModalComponent,
+    FooterComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NgxEditorModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    ToastrModule.forRoot()
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        NgxEditorModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        ToastrModule.forRoot(),
+        MatButtonModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
