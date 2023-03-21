@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { ArticleTableComponent } from './component/article/article-table/article-table.component';
 import { ArticleFormComponent } from './component/article/article-form/article-form.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { NgxEditorModule } from 'ngx-editor';
 import { HeaderComponent } from './component/header/header.component';
 import {ToastrModule} from "ngx-toastr";
@@ -29,17 +29,18 @@ import { FooterComponent } from './component/footer/footer.component';
     UploadModalComponent,
     FooterComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        NgxEditorModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
-        ToastrModule.forRoot(),
-        MatButtonModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgxEditorModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    ToastrModule.forRoot(),
+    MatButtonModule,
+    FormsModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
