@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-2">
+    <nav class="nav flex-column">
+      <a class="nav-link active" href="#">Active</a>
+      <a class="nav-link" href="#">Link</a>
+      <a class="nav-link" href="#">Link</a>
+      <a class="nav-link disabled" href="#">Disabled</a>
+    </nav>
+  </div>
+
+  <div class="col-8">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Dominio</th>
+          <th>Permalink</th>
+          <th>Archivo</th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let file of pendingFiles">
+          <td>{{ file.domain }}</td>
+          <td>{{ file.title }}</td>
+          <td>{{ file.imageUrl }}</td>
+          <td>
+            <button class="btn btn-primary" (click)="retryFile(file)">Reintentar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

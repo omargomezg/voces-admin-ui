@@ -1,7 +1,7 @@
 import {ArticleModel} from "./article.model";
 
 export interface ListOfModel {
-  articles: ArticleModel[];
+  items: ArticleModel[];
   currentPage: number;
   totalItems: number;
   totalPages: number;

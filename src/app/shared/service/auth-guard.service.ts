@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router , RouterStateSnapshot} from "@angular/router";
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuardService implements CanActivate{
+export class AuthGuardService implements CanActivate {
 
-  constructor( private router: Router) {
+  constructor() {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -16,8 +17,10 @@ export class AuthGuardService implements CanActivate{
       return true;
     }
 
-    // not logged in so redirect to login page with the return url
-    window.open('any_url', '_self');
+    const {domain, region, clientId, uri} = environment.cognito;
+    const fullUrl = `https://${domain}.auth.${region}.amazoncognito.com/oauth2/authorize?client_id=${clientId}&response_type=code&scope=email+openid+profile&redirect_uri=${uri}`;
+    alert('You must be logged in to view this page. ' + fullUrl);
+    window.open(fullUrl, '_blank');
     return false;
   }
 

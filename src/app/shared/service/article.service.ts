@@ -1,25 +1,27 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {configuration} from "../constant/configuration";
-import {ArticleModel} from "../model/article.model";
-import {ListOfModel} from "../model/list-of.model";
-import {OptionsModel} from "../model/options.model";
+import {Observable, Observer} from "rxjs";
+import {environment} from "../../../environments/environment";
+import {PendingFileModel, OptionsModel, ArticleModel, ListOfModel, PaginationModel} from "../model";
+import {ArticleFilterModel} from "../model/article-filter.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
 
-  path = configuration.endpoint + '/article';
+  path = environment.apiUrl + '/article';
 
   constructor(private httpClient: HttpClient) {
   }
 
-  getAll(options: OptionsModel): Observable<ListOfModel> {
+  getAll(options: PaginationModel, filter: ArticleFilterModel): Observable<ListOfModel> {
     let params = new HttpParams();
-    params = params.append('page', options.page-1);
-    params = params.append('size', options.size);
+    params = params.append('page', options.pageIndex);
+    params = params.append('size', options.pageSize);
+    if(filter.category) {
+      params = params.append('category', filter.category);
+    }
     return this.httpClient.get<ListOfModel>(this.path, {params: params});
   }
 
@@ -37,6 +39,14 @@ export class ArticleService {
 
   update(article: ArticleModel): Observable<ArticleModel> {
     return this.httpClient.put<ArticleModel>(this.path + "/" + article.id, article);
+  }
+
+  getPending(): Observable<PendingFileModel[]> {
+    return this.httpClient.get<PendingFileModel[]>(this.path + "/pending");
+  }
+
+  retryPendingFile(file: PendingFileModel): Observable<any> {
+    return this.httpClient.post<any>(this.path + "/pending/retry", file);
   }
 
 }

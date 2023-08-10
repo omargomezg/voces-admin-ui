@@ -1,0 +1,9 @@
+
+.NgxEditor {
+  height: 400px;
+  overflow-y: scroll;
+}
+
+.NgxEditor__Content {
+  min-height: 400px; /* make all of the editor area clickable */
+}

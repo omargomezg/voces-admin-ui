@@ -1,0 +1,26 @@
+<h2>Relacionar Categorías</h2>
+<div class="row">
+  <div class="col-sm-5">
+    <mat-form-field appearance="fill" class="m-1">
+      <mat-label>Categoría wordpress</mat-label>
+      <mat-select [(ngModel)]="wordpressCategory">
+        <mat-option *ngFor="let category of uncategorizedNames" [value]="category.uncategorizedName">{{category.uncategorizedName}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Categoría</mat-label>
+      <mat-select [(ngModel)]="category">
+        <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col">
+    <button type="button" mat-stroked-button color="primary"  (click)="changeCategory()">Re-categorizar</button>
+    <button type="button" mat-stroked-button color="accent"  (click)="getNewCategories()">Obtener nuevas categorías</button>
+  </div>
+  <div class="row" *ngFor="let uncategorized of uncategorizedNames">
+    <div class="col-sm-5">
+      {{uncategorized.uncategorizedName}}
+    </div>
+    <div class="col"></div>
+  </div>

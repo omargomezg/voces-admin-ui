@@ -1,30 +1,36 @@
-<form [formGroup]="articleForm">
+<form [formGroup]="articleForm" novalidate>
   <div class="border-bottom bg-body text-end" [ngClass]="showingDialog ==true? '': 'sticky-top'">
     <div class="row">
       <div class="col">
         <div class="mb-2 mt-2">
           <button class="btn btn-sm btn-secondary me-1"
                   title="Volver"
+                  type="button"
                   data-toggle="tooltip" data-placement="bottom" (click)="cancel()">
             <i class="bi bi-arrow-left-short"></i></button>
           <button class="btn btn-sm btn-secondary me-1" (click)="save('DRAFT')"
                   title="Guardar"
+                  type="button"
                   data-toggle="tooltip" data-placement="bottom" [disabled]="!articleForm.valid">
             <i class="bi bi-save"></i>
           </button>
           <button class="btn btn-sm btn-secondary me-1" (click)="save('HIDDEN')"
                   title="Cambiar a borrador"
+                  type="button"
                   *ngIf="articleForm.controls['status'].value !== 'HIDDEN'"
                   data-toggle="tooltip" data-placement="bottom"
                   [disabled]="!articleForm.valid">
             <i class="bi bi-eye-slash"></i>
           </button>
           <button class="btn btn-sm btn-secondary me-1"
+                  type="button"
                   *ngIf="articleForm.controls['status'].value === 'HIDDEN'"
                   title="Eliminar articulo"
                   data-toggle="tooltip" data-placement="bottom" (click)="delete()"><i class="bi bi-trash"></i>
           </button>
-          <button class="btn btn-sm btn-primary" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar</button>
+          <button class="btn btn-sm btn-primary"
+                  type="button" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar
+          </button>
         </div>
       </div>
     </div>
@@ -39,7 +45,7 @@
       </div>
       <div class="mb-3">
         <div class="NgxEditor__Wrapper">
-          <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+          <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
           <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Escribe algo...'"></ngx-editor>
         </div>
       </div>
@@ -68,28 +74,47 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="principalSite" class="form-label">Categoría</label>
-        <select class="form-select" id="category" #category name="category"
-                formControlName="category">
-          <option *ngFor="let site of sites">{{site.name}}</option>
-        </select>
+        <!-- show tags -->
+        <div class="form-group">
+          <label for="tag">Etiquetas</label>
+          <input type="text" class="form-control" id="tag" (keydown.enter)="addTag($event)">
+          <div class="form-text">Las etiquetas permiten generar contenido relacionado.</div>
+          <ng-container *ngFor="let tag of articleForm.controls['tags'].value; let i=index">
+            &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark" (click)="removeTag(i)">{{tag}}
+            (x)</span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="mb-3">
+            <label for="principalSite" class="form-label">Categoría</label>
+            <select class="form-select" id="category" #category name="category"
+                    formControlName="category">
+              <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+            </select>
+        <button (click)="addCategory()" class="btn btn-link btn-sm">Añadir nueva categoría</button>
       </div>
       <div class="mb-3">
         <label for="summary" class="form-label">Extracto</label>
-        <textarea type="text" class="form-control" id="summary" name="summary" rows="6"
+        <textarea class="form-control" id="summary" name="summary" rows="6"
                   formControlName="summary"> </textarea>
+        <mat-error *ngIf="articleForm.get('summary')?.hasError('maxlength')">El extracto no puede tener más de 255
+          caracteres.
+        </mat-error>
         <div class="form-text">Un texto opcional asociado a una entrada. La mayoría de las veces se usa como el
-          resumen de la entrada.</div>
+          resumen de la entrada.
+        </div>
 
       </div>
       <div class="mb-3">
         <h5>Imagen destacada</h5>
-        <img [src]="articleForm.controls['featureImage'].value" class="img-thumbnail"
+        <img [src]="articleForm.controls['featureImageUrl'].value" class="img-thumbnail"
              (click)="openFileUpload()"
              alt="Imagen principal">
       </div>
     </div>
   </div>
 
+  {{articleForm.valid | json }}
+  {{articleForm.status | json }}
 </form>
 

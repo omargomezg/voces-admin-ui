@@ -1,0 +1,16 @@
+<h1>Notificaciones</h1>
+<div mat-dialog-content>
+  <div class="center" *ngIf="notifications.length === 0">
+      <mat-progress-spinner diameter=50
+                            mode="indeterminate"
+                            color="accent">
+      </mat-progress-spinner>
+  </div>
+  <div class="row small" *ngFor="let notification of notifications">
+    <div class="col-auto text-nowrap">{{notification.createdAt | date:'short'}}</div>
+    <div class="col-auto">{{notification.title}}</div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cerrar</button>
+</div>

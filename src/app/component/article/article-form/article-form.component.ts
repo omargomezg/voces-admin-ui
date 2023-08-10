@@ -1,16 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ArticleService} from "../../../shared/service/article.service";
-import {FormBuilder, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, Validators} from "@angular/forms";
 import {configuration} from "../../../shared/constant/configuration";
-import {Editor} from "ngx-editor";
-import {ArticleModel} from "../../../shared/model/article.model";
+import {Editor, Toolbar} from "ngx-editor";
+import {ArticleModel, AuthorModel, CategoryModel} from "../../../shared/model";
 import {ToastrService} from "ngx-toastr";
-import {AuthorService} from "../../../shared/service/author.service";
-import {AuthorModel} from "../../../shared/model/author.model";
 import {MatDialog} from "@angular/material/dialog";
 import {AuthorFormComponent} from "../../author/author-form/author-form.component";
 import {UploadModalComponent} from "../../file/upload-modal/upload-modal.component";
+import {ArticleService, AuthorService, CategoryService} from "../../../shared/service";
+import {CategoryFormComponent} from "../../category/category-form/category-form.component";
 
 @Component({
   selector: 'app-article-form',
@@ -25,22 +24,34 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
       value: site
     }
   });
+  categories: CategoryModel[] = [];
   authors: AuthorModel[] = [];
   statuses = configuration.statuses;
   filePath = configuration.fileServer;
   editor: Editor = new Editor();
+  toolbar: Toolbar = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['ordered_list', 'bullet_list'],
+    ['blockquote', 'code'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+    ['horizontal_rule', 'format_clear']
+  ];
   showingDialog: boolean;
   html: '' | undefined;
   articleForm = this.fb.group({
     id: [''],
     title: ['', Validators.required],
     permalink: ['', Validators.required],
-    summary: [''],
+    summary: ['',[Validators.maxLength(255)]],
     content: ['', Validators.required],
     referringSite: [''],
     principalSite: [configuration.sites[0], Validators.required],
-    featureImage: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
+    featureImageUrl: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
     category: [''],
+    tags: this.fb.array([]),
     status: ['DRAFT'],
     author: this.fb.group({
       id: ['', Validators.required]
@@ -52,14 +63,16 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
               private router: Router,
               private toastrService: ToastrService,
               private authorService: AuthorService,
-              public dialog: MatDialog) {
+              private categoryService: CategoryService,
+              public matDialog: MatDialog) {
     //TODO Set author from user session
     this.showingDialog = false;
     this.redirectOnSave = true;
-    this.loadAuthors();
   }
 
   ngOnInit(): void {
+    this.loadAuthors();
+    this.loadCategories();
     this.route.params.subscribe(params => {
       if (params['id'])
         this.loadArticle(params['id']);
@@ -70,6 +83,16 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     this.editor.destroy();
   }
 
+  get summary() {
+    return this.articleForm.get('summary');
+  }
+
+  loadCategories(): void {
+    this.categoryService.getAll().subscribe(categories => {
+      this.categories = categories;
+    });
+  }
+
   loadArticle(id: string): void {
     this.articleService.findById(id).subscribe(article => {
       this.articleForm.controls["id"].setValue(article.id);
@@ -78,8 +101,14 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
       this.articleForm.controls["summary"].setValue(article.summary);
       this.articleForm.controls["referringSite"].setValue(article.referringSite);
       this.articleForm.controls["status"].setValue(article.status);
-      if (article.featureImage) {
-        this.articleForm.controls["featureImage"].setValue(article.featureImage);
+      this.articleForm.controls["principalSite"].setValue(article.principalSite);
+      this.articleForm.controls['category'].setValue(article.category);
+      article.tags.forEach(tag => {
+        this.tags.push(this.fb.control(tag));
+      });
+      this.articleForm.controls["tags"].setValue(article.tags);
+      if (article.featureImageUrl) {
+        this.articleForm.controls["featureImageUrl"].setValue(article.featureImageUrl);
       }
       this.createPermalink(article.title);
       if (article.author) {
@@ -87,9 +116,26 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
       }
     })
   }
+  get tags() {
+    return this.articleForm.get('tags') as FormArray;
+  }
+
+  addTag(event: any): void {
+    const value = event.target.value;
+    this.tags.push(this.fb.control(value));
+    event.target.value = '';
+  }
+
+  removeTag(index: number) {
+    this.tags.removeAt(index)
+  }
 
   loadAuthors(): void {
-    this.authorService.getAll().subscribe(authors => this.authors = authors);
+    this.authorService.getAll().subscribe(authors => {
+      this.authors = authors;
+      console.log(authors[0].id)
+      this.articleForm.controls['author'].controls['id'].setValue(authors[0].id);
+    });
   }
 
   createPermalink(title: string): void {
@@ -155,7 +201,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   openAuthorForm(): void {
     this.showingDialog = true;
-    const dialogRef = this.dialog.open(AuthorFormComponent, {
+    const dialogRef = this.matDialog.open(AuthorFormComponent, {
       data: {},
     });
 
@@ -167,20 +213,32 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
   openFileUpload() {
     this.showingDialog = true;
-    const dialogRef = this.dialog.open(UploadModalComponent, {
+    const dialogRef = this.matDialog.open(UploadModalComponent, {
       data: {title: 'Imagen destacada'},
     });
 
     dialogRef.afterClosed().subscribe(fileName => {
       let hasId = this.articleForm.controls['id'].value as string !== '';
       if (fileName) {
-        this.articleForm.controls['featureImage'].setValue(`${this.filePath}/${fileName}`);
-        if(hasId) {
+        this.articleForm.controls['featureImageUrl'].setValue(`${this.filePath}/${fileName}`);
+        if (hasId) {
           this.redirectOnSave = false;
           this.save(this.articleForm.controls['status'].value as string);
         }
       }
       this.showingDialog = false;
+    });
+  }
+
+  addCategory() {
+    this.showingDialog = true;
+    const dialogRef = this.matDialog.open(CategoryFormComponent, {
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.showingDialog = false;
+      this.loadCategories();
     });
   }
 }
