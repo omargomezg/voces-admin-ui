@@ -22,6 +22,9 @@ export class ArticleService {
     if(filter.category) {
       params = params.append('category', filter.category);
     }
+    if(filter.principalSite) {
+      params = params.append('principalSite', filter.principalSite);
+    }
     return this.httpClient.get<ListOfModel>(this.path, {params: params});
   }
 

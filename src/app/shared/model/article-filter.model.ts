@@ -1,8 +1,10 @@
 export class ArticleFilterModel {
-  category: string;
+    category: string;
+    principalSite: string;
 
-  constructor() {
-    this.category = '';
-  }
+    constructor() {
+        this.category = '';
+        this.principalSite = '';
+    }
 
 }

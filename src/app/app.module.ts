@@ -26,6 +26,7 @@ import { NotificationSidebarComponent } from './component/notification-sidebar/n
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatIconModule} from "@angular/material/icon";
 import { CategoryFormComponent } from './component/category/category-form/category-form.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -42,23 +43,24 @@ import { CategoryFormComponent } from './component/category/category-form/catego
     NotificationSidebarComponent,
     CategoryFormComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    NgxEditorModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    ToastrModule.forRoot(),
-    MatButtonModule,
-    FormsModule,
-    MatPaginatorModule,
-    MatInputModule,
-    MatMenuModule,
-    MatProgressSpinnerModule,
-    MatIconModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        NgxEditorModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        ToastrModule.forRoot(),
+        MatButtonModule,
+        FormsModule,
+        MatPaginatorModule,
+        MatInputModule,
+        MatMenuModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatProgressBarModule
+    ],
   providers: [],
   exports: [
     HeaderComponent,

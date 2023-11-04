@@ -5,64 +5,73 @@ import {ArticleModel, CategoryModel, PaginationModel} from "../../../shared/mode
 import {PageEvent} from "@angular/material/paginator";
 import {CategoryService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
+import {configuration} from "../../../shared/constant/configuration";
 
 @Component({
-  selector: 'app-article-table',
-  templateUrl: './article-table.component.html',
-  styleUrls: ['./article-table.component.css']
+    selector: 'app-article-table',
+    templateUrl: './article-table.component.html',
+    styleUrls: ['./article-table.component.css']
 })
 export class ArticleTableComponent implements OnInit {
 
-  articles: ArticleModel[] = [];
-  categories: CategoryModel[] = [];
-  pagination: PaginationModel = new PaginationModel();
-  totalOfElements: number;
-  selectedCategory: string = '0';
+    loading: boolean;
+    articles: ArticleModel[] = [];
+    categories: CategoryModel[] = [];
+    domains = configuration.sites;
+    pagination: PaginationModel = new PaginationModel();
+    totalOfElements: number;
+    selectedCategory: string = '0';
+    selectedDomain: string = '0';
 
-  constructor(public articleService: ArticleService, private router: Router,
-              private categoryService: CategoryService) {
-    this.totalOfElements = 0;
-  }
-
-  ngOnInit(): void {
-    this.loadCategories();
-    this.loadArticles();
-  }
-
-  loadCategories(): void {
-    this.categoryService.getAll().subscribe(categories => {
-      this.categories = categories;
-    });
-  }
-
-  loadArticles(): void {
-    const filter = new ArticleFilterModel();
-    if(this.selectedCategory!='0') {
-      filter.category = this.selectedCategory;
+    constructor(public articleService: ArticleService, private router: Router,
+                private categoryService: CategoryService) {
+        this.loading = true;
+        this.totalOfElements = 0;
     }
-    this.articleService.getAll(this.pagination, filter).subscribe(result => {
-      this.totalOfElements = result.totalItems;
-      this.pagination.length = result.totalItems;
-      this.articles = result.items;
-    });
-  }
 
-  open(id: string): void {
-    this.router.navigateByUrl('/article/' + id);
-  }
+    ngOnInit(): void {
+        this.loadCategories();
+        this.loadArticles();
+    }
 
-  addNewArticle(): void {
-    this.router.navigateByUrl('/article/create');
-  }
+    loadCategories(): void {
+        this.categoryService.getAll().subscribe(categories => {
+            this.categories = categories;
+        });
+    }
 
-  handlePageEvent(e: PageEvent) {
-    this.pagination.length = e.length;
-    this.pagination.pageSize = e.pageSize;
-    this.pagination.pageIndex = e.pageIndex;
-    this.loadArticles()
-  }
+    loadArticles(): void {
+        const filter = new ArticleFilterModel();
+        if (this.selectedCategory != '0') {
+            filter.category = this.selectedCategory;
+        }
+        if (this.selectedDomain != '0') {
+            filter.principalSite = this.selectedDomain;
+        }
+        this.articleService.getAll(this.pagination, filter).subscribe(result => {
+            this.totalOfElements = result.totalElements;
+            this.pagination.length = result.totalElements;
+            this.articles = result.content;
+            this.loading = false;
+        });
+    }
 
-  refresh() {
-    this.loadArticles();
-  }
+    open(id: string): void {
+        this.router.navigateByUrl('/article/' + id);
+    }
+
+    addNewArticle(): void {
+        this.router.navigateByUrl('/article/create');
+    }
+
+    handlePageEvent(e: PageEvent) {
+        this.pagination.length = e.length;
+        this.pagination.pageSize = e.pageSize;
+        this.pagination.pageIndex = e.pageIndex;
+        this.loadArticles()
+    }
+
+    refresh() {
+        this.loadArticles();
+    }
 }

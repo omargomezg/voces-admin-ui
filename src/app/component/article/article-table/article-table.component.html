@@ -3,7 +3,11 @@
   <div class="col-auto">
     <select class="form-select-sm" [(ngModel)]="selectedCategory">
       <option value="0">Todos</option>
-      <option [value]="category.id" *ngFor="let category of categories">{{category.name}}</option>
+      <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
+    </select>
+    <select class="form-select-sm" [(ngModel)]="selectedDomain">
+      <option value="0">Todos</option>
+      <option [value]="domain" *ngFor="let domain of domains">{{domain}}</option>
     </select>
   </div>
   <div class="col-auto">
@@ -15,7 +19,7 @@
     </button>
   </div>
 </div>
-<table class="table table-hover table-bordered" *ngIf="articles.length > 0">
+<table class="table table-hover table-bordered">
   <thead>
   <tr>
     <th scope="col">Titulo</th>
@@ -26,7 +30,13 @@
     <th scope="col">Acción</th>
   </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="loading"><tr>
+    <td colspan="6">
+
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </td>
+  </tr></tbody>
+  <tbody *ngIf="articles.length > 0 && !loading">
   <tr *ngFor="let article of articles">
     <td>{{article.title}}</td>
     <td>{{article.author ? article.author.name : ''}}</td>

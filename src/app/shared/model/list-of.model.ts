@@ -1,8 +1,8 @@
 import {ArticleModel} from "./article.model";
 
 export interface ListOfModel {
-  items: ArticleModel[];
+  content: ArticleModel[];
   currentPage: number;
-  totalItems: number;
+  totalElements: number;
   totalPages: number;
 }
