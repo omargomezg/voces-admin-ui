@@ -20,7 +20,7 @@ export class AuthGuardService implements CanActivate {
     const {domain, region, clientId, uri} = environment.cognito;
     const fullUrl = `https://${domain}.auth.${region}.amazoncognito.com/oauth2/authorize?client_id=${clientId}&response_type=code&scope=email+openid+profile&redirect_uri=${uri}`;
     alert('You must be logged in to view this page. ' + fullUrl);
-    window.open(fullUrl, '_blank');
+    window.open(fullUrl, '_self');
     return false;
   }
 

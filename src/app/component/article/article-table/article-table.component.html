@@ -7,7 +7,7 @@
     </select>
     <select class="form-select-sm" [(ngModel)]="selectedDomain">
       <option value="0">Todos</option>
-      <option [value]="domain" *ngFor="let domain of domains">{{domain}}</option>
+      <option [value]="domain.key" *ngFor="let domain of domains">{{domain.name}}</option>
     </select>
   </div>
   <div class="col-auto">

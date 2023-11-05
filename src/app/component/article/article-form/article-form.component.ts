@@ -3,12 +3,12 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormArray, FormBuilder, Validators} from "@angular/forms";
 import {configuration} from "../../../shared/constant/configuration";
 import {Editor, Toolbar} from "ngx-editor";
-import {ArticleModel, AuthorModel, CategoryModel} from "../../../shared/model";
+import {ArticleModel, AuthorModel, CategoryModel, DomainModel} from "../../../shared/model";
 import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {AuthorFormComponent} from "../../author/author-form/author-form.component";
 import {UploadModalComponent} from "../../file/upload-modal/upload-modal.component";
-import {ArticleService, AuthorService, CategoryService} from "../../../shared/service";
+import {ArticleService, AuthorService, CategoryService, ValueService} from "../../../shared/service";
 import {CategoryFormComponent} from "../../category/category-form/category-form.component";
 
 @Component({
@@ -18,12 +18,7 @@ import {CategoryFormComponent} from "../../category/category-form/category-form.
 })
 export class ArticleFormComponent implements OnInit, OnDestroy {
 
-    sites = configuration.sites.map(site => {
-        return {
-            name: site,
-            value: site
-        }
-    });
+    sites: DomainModel[] = [];
     categories: CategoryModel[] = [];
     authors: AuthorModel[] = [];
     statuses = configuration.statuses;
@@ -69,6 +64,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private articleService: ArticleService, private fb: FormBuilder,
                 private router: Router,
                 private toastrService: ToastrService,
+                private valueService: ValueService,
                 private authorService: AuthorService,
                 private categoryService: CategoryService,
                 public matDialog: MatDialog) {
@@ -86,6 +82,9 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.valueService.getDomains().subscribe(domains => {
+            this.sites = domains;
+        });
         this.loadAuthors();
         this.loadCategories();
         this.route.params.subscribe(params => {

@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ArticleService} from "../../../shared/service/article.service";
 import {Router} from "@angular/router";
-import {ArticleModel, CategoryModel, PaginationModel} from "../../../shared/model";
+import {ArticleModel, DomainModel, CategoryModel, PaginationModel} from "../../../shared/model";
 import {PageEvent} from "@angular/material/paginator";
-import {CategoryService} from "../../../shared/service";
+import {CategoryService, ValueService, ArticleService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
-import {configuration} from "../../../shared/constant/configuration";
 
 @Component({
     selector: 'app-article-table',
@@ -17,21 +15,29 @@ export class ArticleTableComponent implements OnInit {
     loading: boolean;
     articles: ArticleModel[] = [];
     categories: CategoryModel[] = [];
-    domains = configuration.sites;
+    domains: DomainModel[] = [];
     pagination: PaginationModel = new PaginationModel();
     totalOfElements: number;
     selectedCategory: string = '0';
     selectedDomain: string = '0';
 
     constructor(public articleService: ArticleService, private router: Router,
-                private categoryService: CategoryService) {
+                private categoryService: CategoryService,
+                private valueService: ValueService) {
         this.loading = true;
         this.totalOfElements = 0;
     }
 
     ngOnInit(): void {
+        this.loadDomains();
         this.loadCategories();
         this.loadArticles();
+    }
+
+    loadDomains(): void {
+        this.valueService.getDomains().subscribe(domains => {
+            this.domains = domains;
+        });
     }
 
     loadCategories(): void {

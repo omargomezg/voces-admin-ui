@@ -4,3 +4,4 @@ export * from './article.service';
 export * from './file.service';
 export * from './auth-guard.service';
 export * from './notification.service';
+export * from './value.service';

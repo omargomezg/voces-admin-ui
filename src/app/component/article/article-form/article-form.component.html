@@ -63,7 +63,7 @@
                 <label for="principalSite" class="form-label">Sitio principal</label>
                 <select class="form-select" id="principalSite" #principalSite name="principalSite"
                         formControlName="principalSite">
-                    <option *ngFor="let site of sites">{{site.name}}</option>
+                    <option [value]="site.key" *ngFor="let site of sites">{{site.name}}</option>
                 </select>
             </div>
             <div class="input-group mb-3" formGroupName="author">

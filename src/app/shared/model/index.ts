@@ -7,3 +7,4 @@ export * from './list-of.model';
 export * from './notification.model';
 export * from './category.model';
 export * from './uncategorized.model';
+export * from './domain.model';
