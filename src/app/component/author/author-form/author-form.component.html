@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-body">
+    <form [formGroup]="formAuthor" (submit)="submit()">
+      <div class="mb-3">
+        <label for="alias" class="form-label">Alias</label>
+        <input type="text" class="form-control" id="alias" formControlName="alias">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" formControlName="email" placeholder="name@example.com">
+      </div>
+      <button type="button" class="btn btn-sm btn-secondary me-1" (click)="onNoClick()">Cerrar</button>
+      <button class="btn btn-sm btn-primary me-1" [disabled]="!formAuthor.valid">Guardar</button>
+    </form>
+  </div>
+</div>

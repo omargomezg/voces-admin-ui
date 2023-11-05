@@ -1,19 +1,48 @@
-<table class="table">
+<h1>Artículos y noticias</h1>
+<div class="row border-bottom bg-body mb-2 pb-1 gy-2 gx-3">
+  <div class="col-auto">
+    <select class="form-select-sm" [(ngModel)]="selectedCategory">
+      <option value="0">Todos</option>
+      <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
+    </select>
+    <select class="form-select-sm" [(ngModel)]="selectedDomain">
+      <option value="0">Todos</option>
+      <option [value]="domain" *ngFor="let domain of domains">{{domain}}</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-sm btn-secondary me-1" (click)="refresh()">Filtrar</button>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()"><i class="bi bi-plus-square"></i> Añadir
+      nueva
+    </button>
+  </div>
+</div>
+<table class="table table-hover table-bordered">
   <thead>
   <tr>
-    <th scope="col">#</th>
     <th scope="col">Titulo</th>
     <th scope="col">Autor</th>
-    <th scope="col">Fecha</th>
-    <th scope="col">Accion</th>
+    <th scope="col">Dominio</th>
+    <th scope="col">Modificado</th>
+    <th scope="col">Estado</th>
+    <th scope="col">Acción</th>
   </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="loading"><tr>
+    <td colspan="6">
+
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </td>
+  </tr></tbody>
+  <tbody *ngIf="articles.length > 0 && !loading">
   <tr *ngFor="let article of articles">
-    <th scope="row">1</th>
     <td>{{article.title}}</td>
-    <td>{{article.author ? article.author.alias : ''}}</td>
-    <td>{{article.updatedAt | date}}</td>
+    <td>{{article.author ? article.author.name : ''}}</td>
+    <td>{{article.principalSite}}</td>
+    <td class="text-nowrap">{{article.updatedAt | date}}</td>
+    <td>{{article.status}}</td>
     <td>
       <button type="button" class="btn btn-link btn-sm" (click)="open(article.id)">
         <i class="bi bi-pencil-square"></i>
@@ -22,3 +51,10 @@
   </tr>
   </tbody>
 </table>
+<mat-paginator #paginator (page)="handlePageEvent($event)"
+               [length]="pagination.length"
+               [pageSize]="pagination.pageSize"
+               [pageSizeOptions]="pagination.pageSizeOptions"
+               aria-label="Select page">
+</mat-paginator>
+
