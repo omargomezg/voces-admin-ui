@@ -5,10 +5,12 @@
       <option value="0">Todos</option>
       <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
     </select>
-    <select class="form-select-sm" [(ngModel)]="selectedDomain">
+    <select class="form-select-sm ms-1" [(ngModel)]="selectedDomain">
       <option value="0">Todos</option>
       <option [value]="domain.key" *ngFor="let domain of domains">{{domain.name}}</option>
     </select>
+    <label class="form-label ms-1" for="inputText">Contiene</label>
+    <input type="text" id="inputText" [(ngModel)]="text" class="form-control-sm">
   </div>
   <div class="col-auto">
     <button class="btn btn-sm btn-secondary me-1" (click)="refresh()">Filtrar</button>

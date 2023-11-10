@@ -17,6 +17,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/configuration/configuration.module').then(m => m.ConfigurationModule),
     canActivate: [AuthGuardService]
   },
+  {
+  path: 'sites',
+    loadChildren: () => import('./modules/site-configuration/site-configuration.module').then(m => m.SiteConfigurationModule),
+    canActivate: [AuthGuardService]
+  },
   {path: 'authentication', component: LoginComponent}
 ];
 

@@ -8,3 +8,6 @@ export * from './notification.model';
 export * from './category.model';
 export * from './uncategorized.model';
 export * from './domain.model';
+export * from './site.model';
+export * from './page.model';
+export * from './social-network.model';

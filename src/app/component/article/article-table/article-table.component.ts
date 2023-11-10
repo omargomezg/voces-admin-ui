@@ -20,6 +20,7 @@ export class ArticleTableComponent implements OnInit {
     totalOfElements: number;
     selectedCategory: string = '0';
     selectedDomain: string = '0';
+    text: string = ''
 
     constructor(public articleService: ArticleService, private router: Router,
                 private categoryService: CategoryService,
@@ -54,6 +55,7 @@ export class ArticleTableComponent implements OnInit {
         if (this.selectedDomain != '0') {
             filter.principalSite = this.selectedDomain;
         }
+        filter.text = this.text;
         this.articleService.getAll(this.pagination, filter).subscribe(result => {
             this.totalOfElements = result.totalElements;
             this.pagination.length = result.totalElements;

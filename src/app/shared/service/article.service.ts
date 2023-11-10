@@ -25,6 +25,9 @@ export class ArticleService {
         if (filter.principalSite) {
             params = params.append('principalSite', filter.principalSite);
         }
+        if (filter.text) {
+            params = params.append('text', filter.text);
+        }
         return this.httpClient.get<ListOfModel>(this.path, {params: params});
     }
 
