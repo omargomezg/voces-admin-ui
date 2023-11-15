@@ -44,6 +44,8 @@ export class ArticleService {
     }
 
     update(article: ArticleModel): Observable<ArticleModel> {
+        article.createdAt = '';
+        article.updatedAt = '';
         return this.httpClient.put<ArticleModel>(this.path + "/" + article.id, article);
     }
 

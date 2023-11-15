@@ -7,37 +7,92 @@
         </ul>
     </div>
     <div class="col-sm-10">
-        <h2>Relacionar Categorías</h2>
-        <div class="row">
-            <div class="col-sm-5">
-                <mat-form-field appearance="fill" class="m-1">
-                    <mat-label>Categoría wordpress</mat-label>
-                    <mat-select [(ngModel)]="wordpressCategory">
-                        <mat-option *ngFor="let category of uncategorizedNames"
-                                    [value]="category.uncategorizedName">{{category.uncategorizedName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="fill">
-                    <mat-label>Categoría</mat-label>
-                    <mat-select [(ngModel)]="category">
-                        <mat-option *ngFor="let category of categories"
-                                    [value]="category.id">{{category.name}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col">
-                <button type="button" mat-stroked-button color="primary" (click)="changeCategory()">Re-categorizar
-                </button>
-                <button type="button" mat-stroked-button color="accent" (click)="getNewCategories()">Obtener nuevas
-                    categorías
-                </button>
-            </div>
-            <div class="row" *ngFor="let uncategorized of uncategorizedNames">
-                <div class="col-sm-5">
-                    {{uncategorized.uncategorizedName}}
+        <mat-tab-group>
+            <mat-tab label="Categorías">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <label for="categories" class="col-sm-2 col-form-label">Seleccione una opción</label>
+                            <div class="col-sm-5">
+                                <select id="categories" #cat class="form-select col-sm-4"
+                                        (change)="loadForm(cat.value)">
+                                    <option *ngFor="let category of categories"
+                                            [value]="category.id">{{category.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr>
+                        <form [formGroup]="formCategory" novalidate (ngSubmit)="save()">
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="name" name="name" formControlName="name">
+                                </div>
+                                <div class="col">
+                                    <label for="slug" class="form-label">Slug</label>
+                                    <input type="text" class="form-control" id="slug" name="slug" formControlName="slug">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4 mb-3">
+                                <label for="keyword">Palabras clave</label>
+                                <input type="text" class="form-control" id="keyword"
+                                       (keydown.enter)="addKeyword($event)">
+                                <div class="form-text">Las keywords permiten personalizar el despliegue de artículos en
+                                    esta
+                                    categoría..
+                                </div>
+                                <ng-container *ngFor="let keyword of formCategory.controls['keywords'].value; let i=index">
+                                    &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark"
+                                                (click)="removeKeyword(i)">{{keyword}}
+                                    (x)</span>
+                                </ng-container>
+                            </div>
+                            <div>
+                                <button type="submit"
+                                        [disabled]="!formCategory.valid"
+                                        class="btn btn-primary">Actualizar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="col"></div>
-            </div>
-        </div>
+            </mat-tab>
+            <mat-tab label="Indexación">
+                <h2>Relacionar Categorías</h2>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <mat-form-field appearance="fill" class="m-1">
+                            <mat-label>Categoría wordpress</mat-label>
+                            <mat-select [(ngModel)]="wordpressCategory">
+                                <mat-option *ngFor="let category of uncategorizedNames"
+                                            [value]="category.uncategorizedName">{{category.uncategorizedName}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Categoría</mat-label>
+                            <mat-select [(ngModel)]="category">
+                                <mat-option *ngFor="let category of categories"
+                                            [value]="category.id">{{category.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <button type="button" mat-stroked-button color="primary" (click)="changeCategory()">
+                            Re-categorizar
+                        </button>
+                        <button type="button" mat-stroked-button color="accent" (click)="getNewCategories()">Obtener
+                            nuevas
+                            categorías
+                        </button>
+                    </div>
+                    <div class="row" *ngFor="let uncategorized of uncategorizedNames">
+                        <div class="col-sm-5">
+                            {{uncategorized.uncategorizedName}}
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
     </div>
 </div>

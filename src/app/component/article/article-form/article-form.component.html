@@ -43,6 +43,16 @@
                        formControlName="title">
                 <div class="form-text">URL: {{articleForm.controls['permalink'].value}}</div>
             </div>
+            <div class="row">
+                <div class="col">
+                    <label for="createdAt" class="form-label">Fecha de publicación</label>
+                    <input type="text" id="createdAt" class="form-control" readonly formControlName="createdAt">
+                </div>
+                <div class="col">
+                    <label for="updatedAt" class="form-label">Última actualización</label>
+                    <input type="text" id="updatedAt" class="form-control" readonly formControlName="updatedAt">
+                </div>
+            </div>
             <div class="mb-3">
                 <div class="NgxEditor__Wrapper">
                     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>

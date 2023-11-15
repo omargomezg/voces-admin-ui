@@ -8,5 +8,6 @@ export interface SiteModel {
     name: string;
     description: string;
     url: string;
+    keywords: string[];
     socialNetworks: SocialNetworkModel[];
 }

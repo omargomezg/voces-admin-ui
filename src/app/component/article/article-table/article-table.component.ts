@@ -4,6 +4,7 @@ import {ArticleModel, DomainModel, CategoryModel, PaginationModel} from "../../.
 import {PageEvent} from "@angular/material/paginator";
 import {CategoryService, ValueService, ArticleService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
+import {filter} from "rxjs";
 
 @Component({
     selector: 'app-article-table',
@@ -30,6 +31,12 @@ export class ArticleTableComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        if (sessionStorage.getItem('filter') != undefined) {
+            const filter = JSON.parse(sessionStorage.getItem('filter') as string) as ArticleFilterModel;
+            this.selectedCategory = filter.category;
+            this.selectedDomain = filter.principalSite;
+            this.text = filter.text;
+        }
         this.loadDomains();
         this.loadCategories();
         this.loadArticles();
@@ -56,6 +63,8 @@ export class ArticleTableComponent implements OnInit {
             filter.principalSite = this.selectedDomain;
         }
         filter.text = this.text;
+        sessionStorage.setItem('filter', JSON.stringify(filter));
+        sessionStorage.setItem('pagination', JSON.stringify(this.pagination));
         this.articleService.getAll(this.pagination, filter).subscribe(result => {
             this.totalOfElements = result.totalElements;
             this.pagination.length = result.totalElements;
@@ -81,5 +90,13 @@ export class ArticleTableComponent implements OnInit {
 
     refresh() {
         this.loadArticles();
+    }
+
+    clearFilter(): void {
+        this.pagination = new PaginationModel();
+        this.text = '';
+        sessionStorage.removeItem('filter');
+        sessionStorage.removeItem('pagination');
+        this.ngOnInit();
     }
 }

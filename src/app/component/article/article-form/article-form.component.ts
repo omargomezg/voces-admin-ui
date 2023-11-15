@@ -10,6 +10,7 @@ import {AuthorFormComponent} from "../../author/author-form/author-form.componen
 import {UploadModalComponent} from "../../file/upload-modal/upload-modal.component";
 import {ArticleService, AuthorService, CategoryService, ValueService} from "../../../shared/service";
 import {CategoryFormComponent} from "../../category/category-form/category-form.component";
+import {formatDate} from "@angular/common";
 
 @Component({
     selector: 'app-article-form',
@@ -21,6 +22,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     sites: DomainModel[] = [];
     categories: CategoryModel[] = [];
     authors: AuthorModel[] = [];
+    article: ArticleModel = new ArticleModel();
     statuses = configuration.statuses;
     filePath = configuration.fileServer;
     editor: Editor = new Editor();
@@ -40,6 +42,8 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
         id: [''],
         title: ['', Validators.required],
         permalink: ['', Validators.required],
+        createdAt: [''],
+        updatedAt: [''],
         summary: ['', [Validators.maxLength(255)]],
         content: ['', Validators.required],
         referringSite: [''],
@@ -105,9 +109,12 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
 
     loadArticle(id: string): void {
         this.articleService.findById(id).subscribe(article => {
+            this.article = article;
             this.articleForm.controls["id"].setValue(article.id);
             this.articleForm.controls["title"].setValue(article.title);
             this.articleForm.controls["content"].setValue(article.content);
+            this.articleForm.controls["createdAt"].setValue(formatDate(article.createdAt, 'dd MMM yyyy hh:mm', 'es-CL'));
+            this.articleForm.controls["updatedAt"].setValue(formatDate(article.updatedAt, 'dd MMM yyyy hh:mm', 'es-CL'));
             this.articleForm.controls["summary"].setValue(article.summary);
             this.articleForm.controls["referringSite"].setValue(article.referringSite);
             this.articleForm.controls["status"].setValue(article.status);

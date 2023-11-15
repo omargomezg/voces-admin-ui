@@ -7,7 +7,8 @@ export class ArticleModel {
     category!: Category;
     content!: string;
     summary!: string;
-    updatedAt: Date;
+    createdAt!: string;
+    updatedAt!: string;
     referringSite!: string;
     status!: string;
     featureImage: FeatureImage;
@@ -16,7 +17,6 @@ export class ArticleModel {
     principalSite!: string;
 
     constructor() {
-        this.updatedAt = new Date();
         this.author = new AuthorModel();
         this.featureImage = new FeatureImage();
     }

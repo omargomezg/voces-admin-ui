@@ -41,7 +41,8 @@ export class SiteListComponent implements OnInit {
             domain: [this.getValue(this.site.domain), [Validators.required]],
             description: [this.getValue(this.site.description), [Validators.required]],
             url: [this.getValue(this.site.url), [Validators.required, Validators.pattern(this.reg)]],
-            socialNetworks: this.fb.array([])
+            socialNetworks: this.fb.array([]),
+            keywords: this.fb.array([])
         });
         if (this.site.socialNetworks) {
             this.site.socialNetworks.forEach(socialNetwork => {
@@ -51,14 +52,15 @@ export class SiteListComponent implements OnInit {
                 }));
             })
         }
+        if(this.site.keywords) {
+            this.site.keywords.forEach(keyword => {
+                this.keywords.push(this.fb.control(keyword));
+            })
+        }
     }
 
     get socialNetworks(): FormArray {
         return this.domainForm.controls['socialNetworks'] as FormArray;
-    }
-
-    getValue(value: string): string {
-        return value ? value : '';
     }
 
     addNewSocialNetwork(): void {
@@ -66,6 +68,24 @@ export class SiteListComponent implements OnInit {
             name: ['', [Validators.required]],
             url: ['', [Validators.required]]
         }));
+    }
+
+    get keywords(): FormArray {
+        return this.domainForm.controls['keywords'] as FormArray;
+    }
+
+    addKeyword(event: any): void {
+        const value = event.target.value;
+        this.keywords.push(this.fb.control(value));
+        event.target.value = '';
+    }
+
+    getValue(value: string): string {
+        return value ? value : '';
+    }
+
+    removeKeyword(index: number): void {
+        this.keywords.removeAt(index)
     }
 
     selectDomain(domain: string): void {

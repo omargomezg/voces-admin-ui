@@ -54,6 +54,16 @@
                         social
                     </button>
                 </div>
+                <div class="form-group col-sm-4 mb-3">
+                    <label for="tag">Palabras clave</label>
+                    <input type="text" class="form-control" id="tag" (keydown.enter)="addKeyword($event)">
+                    <div class="form-text">Las keywords permiten personalizar el Home.</div>
+                    <ng-container *ngFor="let tag of domainForm.controls['keywords'].value; let i=index">
+                        &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark"
+                                    (click)="removeKeyword(i)">{{tag}}
+                        (x)</span>
+                    </ng-container>
+                </div>
                 <div>
                     <button type="submit"
                             [disabled]="!domainForm.valid"

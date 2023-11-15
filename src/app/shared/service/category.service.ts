@@ -17,12 +17,16 @@ export class CategoryService {
     return this.httpClient.get<CategoryModel[]>(this.path);
   }
 
+  findById(id: string): Observable<CategoryModel> {
+    return this.httpClient.get<CategoryModel>(this.path + '/' + id);
+  }
+
   create(category: CategoryModel): Observable<CategoryModel> {
     return this.httpClient.post<CategoryModel>(this.path, category);
   }
 
   update(category: CategoryModel): Observable<CategoryModel> {
-    return this.httpClient.put<CategoryModel>(this.path, category);
+    return this.httpClient.put<CategoryModel>(this.path + '/' + category.id, category);
   }
 
   getUncategorized(): Observable<UncategorizedModel[]> {

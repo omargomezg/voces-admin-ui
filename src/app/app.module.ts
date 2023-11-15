@@ -1,5 +1,6 @@
-import {NgModule} from '@angular/core';
+import {LOCALE_ID, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import localeEsCL from '@angular/common/locales/es-CL';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -27,6 +28,9 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatIconModule} from "@angular/material/icon";
 import { CategoryFormComponent } from './component/category/category-form/category-form.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {registerLocaleData} from "@angular/common";
+
+registerLocaleData(localeEsCL, 'es-CL');
 
 @NgModule({
   declarations: [

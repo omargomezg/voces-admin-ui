@@ -14,6 +14,7 @@
   </div>
   <div class="col-auto">
     <button class="btn btn-sm btn-secondary me-1" (click)="refresh()">Filtrar</button>
+    <button class="btn btn-sm btn-secondary me-1" (click)="clearFilter()">Limpiar</button>
   </div>
   <div class="col-auto">
     <button class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()"><i class="bi bi-plus-square"></i> Añadir
@@ -27,6 +28,7 @@
     <th scope="col">Titulo</th>
     <th scope="col">Autor</th>
     <th scope="col">Dominio</th>
+    <th scope="col">Publicado</th>
     <th scope="col">Modificado</th>
     <th scope="col">Estado</th>
     <th scope="col">Acción</th>
@@ -43,7 +45,8 @@
     <td>{{article.title}}</td>
     <td>{{article.author ? article.author.name : ''}}</td>
     <td>{{article.principalSite}}</td>
-    <td class="text-nowrap">{{article.updatedAt | date}}</td>
+    <td class="text-nowrap">{{article.createdAt | date:'dd MMM yyyy hh:mm'}}</td>
+    <td class="text-nowrap">{{article.updatedAt | date: 'dd MMM yyyy hh:mm'}}</td>
     <td>{{article.status}}</td>
     <td>
       <button type="button" class="btn btn-link btn-sm" (click)="open(article.id)">
