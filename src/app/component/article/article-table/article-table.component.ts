@@ -5,6 +5,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {ArticleService, CategoryService, ValueService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
 import {ToastrService} from "ngx-toastr";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-article-table',
@@ -22,9 +23,15 @@ export class ArticleTableComponent implements OnInit {
     selectedCategory: string = '0';
     selectedDomain: string = '0';
     text: string = ''
+    formFilter: FormGroup = this.formBuilder.group({
+        text: [''],
+        category: [''],
+        principalSite: ['']
+    });
 
     constructor(public articleService: ArticleService, private router: Router,
                 private categoryService: CategoryService,
+                private formBuilder: FormBuilder,
                 private toast: ToastrService,
                 private valueService: ValueService) {
         this.loading = true;
@@ -34,9 +41,10 @@ export class ArticleTableComponent implements OnInit {
     ngOnInit(): void {
         if (sessionStorage.getItem('filter') != undefined) {
             const filter = JSON.parse(sessionStorage.getItem('filter') as string) as ArticleFilterModel;
-            this.selectedCategory = filter.category;
-            this.selectedDomain = filter.principalSite;
-            this.text = filter.text;
+            this.formFilter.setValue(filter);
+        }
+        if (sessionStorage.getItem('pagination') != undefined) {
+            this.pagination = JSON.parse(sessionStorage.getItem('pagination') as string) as PaginationModel;
         }
         this.loadDomains();
         this.loadCategories();
@@ -56,14 +64,7 @@ export class ArticleTableComponent implements OnInit {
     }
 
     loadArticles(): void {
-        const filter = new ArticleFilterModel();
-        if (this.selectedCategory != '0') {
-            filter.category = this.selectedCategory;
-        }
-        if (this.selectedDomain != '0') {
-            filter.principalSite = this.selectedDomain;
-        }
-        filter.text = this.text;
+        let filter = this.formFilter.value as ArticleFilterModel;
         sessionStorage.setItem('filter', JSON.stringify(filter));
         sessionStorage.setItem('pagination', JSON.stringify(this.pagination));
         this.articleService.getAll(this.pagination, filter).subscribe(result => {
@@ -95,7 +96,7 @@ export class ArticleTableComponent implements OnInit {
 
     clearFilter(): void {
         this.pagination = new PaginationModel();
-        this.text = '';
+        this.formFilter.reset();
         sessionStorage.removeItem('filter');
         sessionStorage.removeItem('pagination');
         this.ngOnInit();
@@ -103,11 +104,11 @@ export class ArticleTableComponent implements OnInit {
 
     setAsTag(): void {
         this.articleService.setAsTag(this.text).subscribe(result => {
-            this.toast.success('Se ha actualizado el artículo');
+            this.toast.success(`Se están procesando ${this.totalOfElements} artículos`);
         });
     }
 
     canUpdateTag(): boolean {
-        return this.text != '';
+        return this.formFilter.controls['text'].value != '';
     }
 }

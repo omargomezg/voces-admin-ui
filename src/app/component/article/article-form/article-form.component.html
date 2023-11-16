@@ -28,7 +28,7 @@
                             title="Eliminar articulo"
                             data-toggle="tooltip" data-placement="bottom" (click)="delete()"><i class="bi bi-trash"></i>
                     </button>
-                    <button (click)="openContent()" class="btn btn-secondary btn-sm">Previsualizar</button>
+                    <button (click)="openContent()" class="btn btn-secondary btn-sm me-1">Previsualizar</button>
                     <button class="btn btn-sm btn-primary"
                             type="button" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar
                     </button>
@@ -44,7 +44,7 @@
                        formControlName="title">
                 <div class="form-text">URL: {{articleForm.controls['permalink'].value}}</div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col">
                     <label for="createdAt" class="form-label">Fecha de publicación</label>
                     <input type="text" id="createdAt" class="form-control" readonly formControlName="createdAt">
