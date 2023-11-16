@@ -57,4 +57,8 @@ export class ArticleService {
         return this.httpClient.post<any>(this.path + "/pending/retry", file);
     }
 
+    setAsTag(text: string): Observable<void> {
+        return this.httpClient.patch<void>(`${this.path}/tag?text=${text}`, {});
+    }
+
 }

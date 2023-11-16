@@ -13,7 +13,8 @@
     <input type="text" id="inputText" [(ngModel)]="text" class="form-control-sm">
   </div>
   <div class="col-auto">
-    <button class="btn btn-sm btn-secondary me-1" (click)="refresh()">Filtrar</button>
+    <button class="btn btn-sm btn-primary me-1" (click)="refresh()">Filtrar</button>
+    <button class="btn btn-sm btn-secondary me-1" [disabled]="!canUpdateTag()" (click)="setAsTag()">Crear Tag</button>
     <button class="btn btn-sm btn-secondary me-1" (click)="clearFilter()">Limpiar</button>
   </div>
   <div class="col-auto">

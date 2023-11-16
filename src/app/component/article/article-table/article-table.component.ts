@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {ArticleModel, DomainModel, CategoryModel, PaginationModel} from "../../../shared/model";
+import {ArticleModel, CategoryModel, DomainModel, PaginationModel} from "../../../shared/model";
 import {PageEvent} from "@angular/material/paginator";
-import {CategoryService, ValueService, ArticleService} from "../../../shared/service";
+import {ArticleService, CategoryService, ValueService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
-import {filter} from "rxjs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
     selector: 'app-article-table',
@@ -25,6 +25,7 @@ export class ArticleTableComponent implements OnInit {
 
     constructor(public articleService: ArticleService, private router: Router,
                 private categoryService: CategoryService,
+                private toast: ToastrService,
                 private valueService: ValueService) {
         this.loading = true;
         this.totalOfElements = 0;
@@ -98,5 +99,15 @@ export class ArticleTableComponent implements OnInit {
         sessionStorage.removeItem('filter');
         sessionStorage.removeItem('pagination');
         this.ngOnInit();
+    }
+
+    setAsTag(): void {
+        this.articleService.setAsTag(this.text).subscribe(result => {
+            this.toast.success('Se ha actualizado el artículo');
+        });
+    }
+
+    canUpdateTag(): boolean {
+        return this.text != '';
     }
 }

@@ -11,6 +11,7 @@ import {UploadModalComponent} from "../../file/upload-modal/upload-modal.compone
 import {ArticleService, AuthorService, CategoryService, ValueService} from "../../../shared/service";
 import {CategoryFormComponent} from "../../category/category-form/category-form.component";
 import {formatDate} from "@angular/common";
+import {SiteService} from "../../../shared/service/site.service";
 
 @Component({
     selector: 'app-article-form',
@@ -68,6 +69,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private articleService: ArticleService, private fb: FormBuilder,
                 private router: Router,
                 private toastrService: ToastrService,
+                private siteService: SiteService,
                 private valueService: ValueService,
                 private authorService: AuthorService,
                 private categoryService: CategoryService,
@@ -263,6 +265,14 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             this.showingDialog = false;
             this.loadCategories();
+        });
+    }
+
+    openContent(): void {
+        let url = this.articleForm.controls['featureImage'].controls['url'].value as string;
+        this.siteService.getByDomain(this.articleForm.controls['principalSite'].value as string).subscribe(site => {
+           let url = `${site.url}/${this.articleForm.controls['permalink'].value}`;
+           window.open(url, '_blank');
         });
     }
 }
