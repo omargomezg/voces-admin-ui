@@ -33,36 +33,51 @@
                               placeholder="El sitio de noticias en español más leído del mundo...">
                     </textarea>
                 </div>
-                <div formArrayName="socialNetworks" class="mb-3 col-sm-4">
-                    <ng-container *ngFor="let socialNetwork of socialNetworks.controls; let index = index">
-                        <div [formGroupName]="index">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nombre de la red social</label>
-                                <input type="text" class="form-control" id="name"
-                                       formControlName="name"
-                                       placeholder="Facebook">
-                            </div>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Url</label>
-                                <input type="url" class="form-control" id="url"
-                                       formControlName="url"
-                                       placeholder="https://facebook.com/misitio">
-                            </div>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <div formArrayName="socialNetworks" class="">
+                            <ng-container *ngFor="let socialNetwork of socialNetworks.controls; let index = index">
+                                <div [formGroupName]="index">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Nombre de la red social</label>
+                                        <input type="text" class="form-control" id="name"
+                                               formControlName="name"
+                                               placeholder="Facebook">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Url</label>
+                                        <input type="url" class="form-control" id="url"
+                                               formControlName="url"
+                                               placeholder="https://facebook.com/misitio">
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <button type="button" (click)="addNewSocialNetwork()" class="btn btn-secondary btn-sm">Agregar red
+                                social
+                            </button>
                         </div>
-                    </ng-container>
-                    <button type="button" (click)="addNewSocialNetwork()" class="btn btn-secondary btn-sm">Agregar red
-                        social
-                    </button>
-                </div>
-                <div class="form-group col-sm-4 mb-3">
-                    <label for="tag">Palabras clave</label>
-                    <input type="text" class="form-control" id="tag" (keydown.enter)="addKeyword($event)">
-                    <div class="form-text">Las keywords permiten personalizar el Home.</div>
-                    <ng-container *ngFor="let tag of domainForm.controls['keywords'].value; let i=index">
-                        &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark"
-                                    (click)="removeKeyword(i)">{{tag}}
-                        (x)</span>
-                    </ng-container>
+                        <div class="form-group mb-3">
+                            <label for="tag">Palabras clave</label>
+                            <input type="text" class="form-control" id="tag" (keydown.enter)="addKeyword($event)">
+                            <div class="form-text">Las keywords permiten personalizar el Home.</div>
+                            <ng-container *ngFor="let tag of domainForm.controls['keywords'].value; let i=index">
+                                &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark"
+                                            (click)="removeKeyword(i)">{{tag}}
+                                (x)</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <fieldset>
+                            <legend>Categorías disponibles</legend>
+                            <div class="form-check" >
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Default checkbox
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
                 </div>
                 <div>
                     <button type="submit"
