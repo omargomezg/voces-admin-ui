@@ -24,7 +24,7 @@
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.10.3",
     "jquery": "^3.6.3",
-    "ngx-editor": "^15.3.0",
+    "ngx-editor": "^16.0.1",
     "ngx-toastr": "^16.1.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

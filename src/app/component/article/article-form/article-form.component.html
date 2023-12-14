@@ -28,7 +28,8 @@
                             title="Eliminar articulo"
                             data-toggle="tooltip" data-placement="bottom" (click)="delete()"><i class="bi bi-trash"></i>
                     </button>
-                    <button (click)="openContent()" class="btn btn-secondary btn-sm me-1">Previsualizar</button>
+                    <button (click)="openContent()"
+                            type="button" class="btn btn-secondary btn-sm me-1">Previsualizar</button>
                     <button class="btn btn-sm btn-primary"
                             type="button" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar
                     </button>

@@ -41,6 +41,8 @@ export class SiteListComponent implements OnInit {
             domain: [this.getValue(this.site.domain), [Validators.required]],
             description: [this.getValue(this.site.description), [Validators.required]],
             url: [this.getValue(this.site.url), [Validators.required, Validators.pattern(this.reg)]],
+            logo: [this.getValue(this.site.logo), [Validators.required]],
+            favicon: [this.getValue(this.site.favicon), [Validators.required]],
             socialNetworks: this.fb.array([]),
             keywords: this.fb.array([])
         });

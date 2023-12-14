@@ -5,7 +5,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {ArticleService, CategoryService, ValueService} from "../../../shared/service";
 import {ArticleFilterModel} from "../../../shared/model/article-filter.model";
 import {ToastrService} from "ngx-toastr";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-article-table',
@@ -24,9 +24,9 @@ export class ArticleTableComponent implements OnInit {
     selectedDomain: string = '0';
     text: string = ''
     formFilter: FormGroup = this.formBuilder.group({
-        text: [''],
-        category: [''],
-        principalSite: ['']
+        text: new FormControl(''),
+        category: new FormControl(''),
+        principalSite: new FormControl(''),
     });
 
     constructor(public articleService: ArticleService, private router: Router,
@@ -54,17 +54,21 @@ export class ArticleTableComponent implements OnInit {
     loadDomains(): void {
         this.valueService.getDomains().subscribe(domains => {
             this.domains = domains;
+            this.formFilter.controls['principalSite'].setValue('');
         });
     }
 
     loadCategories(): void {
         this.categoryService.getAll().subscribe(categories => {
             this.categories = categories;
+            this.formFilter.controls['category'].setValue('');
         });
     }
 
     loadArticles(): void {
+        console.log(this.formFilter.value);
         let filter = this.formFilter.value as ArticleFilterModel;
+        console.log(filter);
         sessionStorage.setItem('filter', JSON.stringify(filter));
         sessionStorage.setItem('pagination', JSON.stringify(this.pagination));
         this.articleService.getAll(this.pagination, filter).subscribe(result => {
@@ -84,6 +88,7 @@ export class ArticleTableComponent implements OnInit {
     }
 
     handlePageEvent(e: PageEvent) {
+        this.loading = true;
         this.pagination.length = e.length;
         this.pagination.pageSize = e.pageSize;
         this.pagination.pageIndex = e.pageIndex;
@@ -91,11 +96,14 @@ export class ArticleTableComponent implements OnInit {
     }
 
     refresh() {
+        this.loading = true;
+        this.pagination.pageIndex = 0;
         this.loadArticles();
     }
 
     clearFilter(): void {
         this.pagination = new PaginationModel();
+        this.loading = true;
         this.formFilter.reset();
         sessionStorage.removeItem('filter');
         sessionStorage.removeItem('pagination');
@@ -110,5 +118,9 @@ export class ArticleTableComponent implements OnInit {
 
     canUpdateTag(): boolean {
         return this.formFilter.controls['text'].value != '';
+    }
+
+    show(article: ArticleModel): void {
+        window.open(`${article.site.url}/${article.permalink}`, '_blank');
     }
 }

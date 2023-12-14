@@ -21,10 +21,26 @@
                            placeholder="La voz de ...">
                 </div>
                 <div class="mb-3">
-                    <label for="siteUrl" class="form-label">Url</label>
-                    <input type="url" class="form-control" id="siteUrl"
-                           formControlName="url"
-                           placeholder="https://misitio.com">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="siteUrl" class="form-label">Url</label>
+                            <input type="url" class="form-control" id="siteUrl"
+                                   formControlName="url"
+                                   placeholder="https://misitio.com">
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="logo" class="form-label">Logo</label>
+                            <input type="url" class="form-control" id="logo"
+                                   formControlName="logo"
+                                   placeholder="logo.svg">
+                        </div>
+                        <div class="col-sm-3">
+                            <label for="favicon" class="form-label">Favicon</label>
+                            <input type="url" class="form-control" id="favicon"
+                                   formControlName="favicon"
+                                   placeholder="favicon.png">
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Descripción</label>

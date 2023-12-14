@@ -3,7 +3,7 @@
     <div class="row border-bottom bg-body mb-2 pb-1 gy-2 gx-3">
         <div class="col-auto">
             <select class="form-select-sm" formControlName="category">
-                <option value="">Todas las categorias</option>
+                <option value="">Todas las categorías</option>
                 <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
             </select>
             <select class="form-select-sm ms-1" formControlName="principalSite">
@@ -37,14 +37,14 @@
         <th scope="col">Publicado</th>
         <th scope="col">Modificado</th>
         <th scope="col">Estado</th>
-        <th scope="col">Acción</th>
+        <th scope="col">Acciones</th>
     </tr>
     </thead>
     <tbody *ngIf="loading">
     <tr>
-        <td colspan="6">
-
+        <td colspan="7" style="background-color: black" class="text-center">
             <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <img src="./assets/img/reading-the-paper-newspaper.gif" alt="Cargando..." class="img-fluid">
         </td>
     </tr>
     </tbody>
@@ -56,9 +56,12 @@
         <td class="text-nowrap">{{article.createdAt | date:'dd MMM yyyy hh:mm'}}</td>
         <td class="text-nowrap">{{article.updatedAt | date: 'dd MMM yyyy hh:mm'}}</td>
         <td>{{article.status}}</td>
-        <td>
-            <button type="button" class="btn btn-link btn-sm" (click)="open(article.id)">
+        <td class="text-nowrap">
+            <button type="button" class="btn btn-link btn-sm" title="Editar" (click)="open(article.id)">
                 <i class="bi bi-pencil-square"></i>
+            </button>
+            <button type="button" class="btn btn-link btn-sm" title="Previsualizar" (click)="show(article)">
+                <i class="bi bi-eye-fill"></i>
             </button>
         </td>
     </tr>

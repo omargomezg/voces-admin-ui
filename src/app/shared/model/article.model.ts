@@ -1,4 +1,5 @@
 import {AuthorModel} from "./author.model";
+import {SiteModel} from "./site.model";
 
 export class ArticleModel {
     id!: string;
@@ -15,6 +16,7 @@ export class ArticleModel {
     tags!: string[];
     author: AuthorModel;
     principalSite!: string;
+    site!: SiteModel;
 
     constructor() {
         this.author = new AuthorModel();
