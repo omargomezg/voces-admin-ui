@@ -125,7 +125,6 @@ export class SiteListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(categories => {
-      console.log('The dialog was closed');
       this.site.categories = categories;
     });
   }
