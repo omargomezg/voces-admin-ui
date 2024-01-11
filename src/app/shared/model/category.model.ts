@@ -3,4 +3,5 @@ export interface CategoryModel {
   name: string;
   slug: string;
   keywords: string[];
+  selected: boolean;
 }

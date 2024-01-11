@@ -50,7 +50,7 @@ export class ArticleFormComponent implements OnInit, OnDestroy {
         referringSite: [''],
         principalSite: [configuration.sites[0], Validators.required],
         featureImage: this.fb.group({
-            url: ['https://buzzlab.ch/wp-content/uploads/2013/05/placeholder.png'],
+            url: ['./assets/img/placeholder.png'],
             alt: [''],
             title: ['']
         }),

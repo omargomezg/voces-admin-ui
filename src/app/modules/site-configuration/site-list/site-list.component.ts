@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {SiteService} from "../../../shared/service/site.service";
 import {DomainModel, SiteModel} from "../../../shared/model";
-import {ValueService} from "../../../shared/service";
+import {ValueService, SiteService} from "../../../shared/service";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
+import {MatDialog} from '@angular/material/dialog';
+import {CategoryComponent} from '../category/category.component';
 
 @Component({
     selector: 'app-site-list',
@@ -19,6 +20,7 @@ export class SiteListComponent implements OnInit {
 
 
     constructor(private siteService: SiteService, private valueService: ValueService,
+                private matDialog: MatDialog,
                 private fb: FormBuilder, private toastr: ToastrService) {
     }
 
@@ -116,4 +118,15 @@ export class SiteListComponent implements OnInit {
                 });
         }
     }
+
+  openCategoryModal() {
+    const dialogRef = this.matDialog.open(CategoryComponent, {
+      data: this.site,
+    });
+
+    dialogRef.afterClosed().subscribe(categories => {
+      console.log('The dialog was closed');
+      this.site.categories = categories;
+    });
+  }
 }

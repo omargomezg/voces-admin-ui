@@ -19,6 +19,7 @@ export class ArticleTableComponent implements OnInit {
     categories: CategoryModel[] = [];
     domains: DomainModel[] = [];
     pagination: PaginationModel = new PaginationModel();
+    articleFilter: ArticleFilterModel = new ArticleFilterModel();
     totalOfElements: number;
     selectedCategory: string = '0';
     selectedDomain: string = '0';
@@ -27,6 +28,8 @@ export class ArticleTableComponent implements OnInit {
         text: new FormControl(''),
         category: new FormControl(''),
         principalSite: new FormControl(''),
+        sortBy: new FormControl(''),
+        direction: new FormControl('')
     });
 
     constructor(public articleService: ArticleService, private router: Router,
@@ -66,12 +69,14 @@ export class ArticleTableComponent implements OnInit {
     }
 
     loadArticles(): void {
-        console.log(this.formFilter.value);
         let filter = this.formFilter.value as ArticleFilterModel;
-        console.log(filter);
-        sessionStorage.setItem('filter', JSON.stringify(filter));
+        this.articleFilter.category = filter.category;
+        this.articleFilter.principalSite = filter.principalSite;
+        this.articleFilter.sortBy = filter.sortBy;
+        this.articleFilter.text = filter.text;
+        sessionStorage.setItem('filter', JSON.stringify(this.articleFilter));
         sessionStorage.setItem('pagination', JSON.stringify(this.pagination));
-        this.articleService.getAll(this.pagination, filter).subscribe(result => {
+        this.articleService.getAll(this.pagination, this.articleFilter).subscribe(result => {
             this.totalOfElements = result.totalElements;
             this.pagination.length = result.totalElements;
             this.articles = result.content;
@@ -111,7 +116,8 @@ export class ArticleTableComponent implements OnInit {
     }
 
     setAsTag(): void {
-        this.articleService.setAsTag(this.text).subscribe(result => {
+        const tag = this.formFilter.controls['text'].value;
+        this.articleService.setAsTag(tag).subscribe(result => {
             this.toast.success(`Se están procesando ${this.totalOfElements} artículos`);
         });
     }
@@ -122,5 +128,15 @@ export class ArticleTableComponent implements OnInit {
 
     show(article: ArticleModel): void {
         window.open(`${article.site.url}/${article.permalink}`, '_blank');
+    }
+
+    sort(column: string): void {
+        this.articleFilter.sortBy = column;
+        if (this.articleFilter.direction == 'DESC') {
+            this.articleFilter.direction = 'ASC';
+        } else {
+            this.articleFilter.direction = 'DESC';
+        }
+        this.loadArticles()
     }
 }

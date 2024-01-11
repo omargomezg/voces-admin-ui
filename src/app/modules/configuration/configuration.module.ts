@@ -7,12 +7,14 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatButtonModule} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatTabsModule} from "@angular/material/tabs";
+import { MaintenanceComponent } from './component/maintenance/maintenance.component';
 
 
 
 @NgModule({
   declarations: [
-    PrincipalComponent
+    PrincipalComponent,
+    MaintenanceComponent
   ],
     imports: [
         CommonModule,

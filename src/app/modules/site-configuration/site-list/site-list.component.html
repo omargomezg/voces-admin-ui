@@ -19,6 +19,7 @@
                     <input type="text" class="form-control" id="siteName"
                            formControlName="name"
                            placeholder="La voz de ...">
+                  <p class="text-info text-end" *ngIf="site.totalOfContents > 0">Uff, ya tenemos {{site.totalOfContents}} contenidos.</p>
                 </div>
                 <div class="mb-3">
                     <div class="row">
@@ -83,15 +84,14 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div class="col-sm-6 mb-3">
+                    <div class="col-sm-6 mb-3" *ngIf="site.id">
                         <fieldset>
-                            <legend>Categorías disponibles</legend>
-                            <div class="form-check" >
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    Default checkbox
-                                </label>
-                            </div>
+                            <legend>Categorías disponibles <button type="button" class="btn btn-sm btn-link" (click)="openCategoryModal()">Editar</button></legend>
+                          <mat-chip-set aria-label="Categorías disponibles">
+                              <mat-chip *ngFor="let category of site.categories">
+                                  {{category.name}}
+                              </mat-chip>
+                          </mat-chip-set>
                         </fieldset>
                     </div>
                 </div>

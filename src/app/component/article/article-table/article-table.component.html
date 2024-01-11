@@ -31,7 +31,7 @@
 <table class="table table-hover table-bordered">
     <thead>
     <tr>
-        <th scope="col">Titulo</th>
+        <th scope="col" (click)="sort('title')">Titulo</th>
         <th scope="col">Autor</th>
         <th scope="col">Dominio</th>
         <th scope="col">Publicado</th>
@@ -60,7 +60,9 @@
             <button type="button" class="btn btn-link btn-sm" title="Editar" (click)="open(article.id)">
                 <i class="bi bi-pencil-square"></i>
             </button>
-            <button type="button" class="btn btn-link btn-sm" title="Previsualizar" (click)="show(article)">
+            <button type="button" class="btn btn-link btn-sm"
+                    *ngIf="article.site"
+                    title="Previsualizar" (click)="show(article)">
                 <i class="bi bi-eye-fill"></i>
             </button>
         </td>

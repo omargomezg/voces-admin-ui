@@ -45,7 +45,7 @@
                        formControlName="title">
                 <div class="form-text">URL: {{articleForm.controls['permalink'].value}}</div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3" *ngIf="article.id">
                 <div class="col">
                     <label for="createdAt" class="form-label">Fecha de publicación</label>
                     <input type="text" id="createdAt" class="form-control" readonly formControlName="createdAt">
@@ -91,7 +91,7 @@
                 <div class="form-group">
                     <label for="tag">Etiquetas</label>
                     <input type="text" class="form-control" id="tag" (keydown.enter)="addTag($event)">
-                    <div class="form-text">Las etiquetas permiten generar contenido relacionado.</div>
+                    <div class="form-text">Las etiquetas permiten generar contenido relacionado. También son útiles para el <a href="https://www.google.com/search?oq=que+es+el+seo&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORiABDIHCAEQABiABDIHCAIQABiABDIHCAMQABiABDIHCAQQABiABDIHCAUQABiABDIHCAYQABiABDIHCAcQABiABDIHCAgQABiABDIHCAkQABiABKgCALACAA&sourceid=chrome&ie=UTF-8&mstk=AUzJOisG6umwv_yUVaoLvaXJPhX5DxZiDdqZoYYyqKROqUzEhMzB7znBDE3PCud4HC9yK_SqtBCtNbuS20u63dpiQMxZ8H9Km6DrQD1Te4hw1qc067KoRdKUnbv6lv0cg-gKuZqIBFyjo9m0s0aaFTDSb_GrYmepYft6S_dKN6cRMpym&csuir=1&cs=0&csui=1&gsas=1&q=que%20es%20el%20seo&ved=2ahUKEwivhLDi2JyDAxW1qJUCHbOeCXwQ_AUoAXoECAEQAw&csuio=2&csuip=18" target="_blank">SEO</a></div>
                     <ng-container *ngFor="let tag of articleForm.controls['tags'].value; let i=index">
                         &nbsp;<span class="badge rounded-pill bg-dark text-uppercase btn btn-dark"
                                     (click)="removeTag(i)">{{tag}}
@@ -99,7 +99,7 @@
                     </ng-container>
                 </div>
             </div>
-            <div class="mb-3" formGroupName="category">
+            <div class="mb-3" formGroupName="category" *ngIf="categories">
                 <label for="principalSite" class="form-label">Categoría</label>
                 <select class="form-select" id="category" #category name="category"
                         formControlName="id">
@@ -121,10 +121,11 @@
 
             </div>
             <div class="card" formGroupName="featureImage">
+                <a [routerLink]=""  class="link-light btn btn-link" (click)="openFileUpload()">
                 <img [src]="articleForm.controls['featureImage'].controls['url'].value"
                      class="card-img-top"
-                     (click)="openFileUpload()"
                      alt="Imagen principal">
+                </a>
                 <div class="card-body">
                     <h5 class="card-title">Imagen destacada</h5>
                     <div>
