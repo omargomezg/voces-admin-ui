@@ -28,6 +28,11 @@ export class ArticleService {
         if (filter.text) {
             params = params.append('text', filter.text);
         }
+        console.log(filter.sortBy)
+        if (filter.sortBy) {
+          params = params.append('sortBy', filter.sortBy);
+          params = params.append('direction', filter.direction);
+        }
         return this.httpClient.get<ListOfModel>(this.path, {params: params});
     }
 

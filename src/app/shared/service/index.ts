@@ -6,3 +6,5 @@ export * from './file.service';
 export * from './auth-guard.service';
 export * from './notification.service';
 export * from './value.service';
+export * from './log.service';
+export * from './home.service';

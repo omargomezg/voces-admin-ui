@@ -8,10 +8,9 @@ import {ToastrService} from "ngx-toastr";
 import {MatDialog} from "@angular/material/dialog";
 import {AuthorFormComponent} from "../../author/author-form/author-form.component";
 import {UploadModalComponent} from "../../file/upload-modal/upload-modal.component";
-import {ArticleService, AuthorService, CategoryService, ValueService} from "../../../shared/service";
+import {ArticleService, AuthorService, CategoryService, ValueService, SiteService} from "../../../shared/service";
 import {CategoryFormComponent} from "../../category/category-form/category-form.component";
 import {formatDate} from "@angular/common";
-import {SiteService} from "../../../shared/service/site.service";
 
 @Component({
     selector: 'app-article-form',

@@ -29,6 +29,7 @@
                             data-toggle="tooltip" data-placement="bottom" (click)="delete()"><i class="bi bi-trash"></i>
                     </button>
                     <button (click)="openContent()"
+                            *ngIf="articleForm.controls['status'].value !== 'HIDDEN' && article.id"
                             type="button" class="btn btn-secondary btn-sm me-1">Previsualizar</button>
                     <button class="btn btn-sm btn-primary"
                             type="button" (click)="save('PUBLISHED')" [disabled]="!articleForm.valid">Publicar
@@ -67,6 +68,7 @@
                 <input type="url" class="form-control" id="referringSite" name="referringSite"
                        placeholder="Url de donde se obtuvo la noticia."
                        formControlName="referringSite">
+            <p class="form-text">Si haces un copy & paste, debes indicar la fuente de la noticia, esto ayuda a los buscadores y no se castiga la posición en los resultados de la búsqueda.</p>
             </div>
         </div>
         <div class="col-lg-3">

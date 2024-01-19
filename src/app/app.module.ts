@@ -29,6 +29,9 @@ import {MatIconModule} from "@angular/material/icon";
 import { CategoryFormComponent } from './component/category/category-form/category-form.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {registerLocaleData} from "@angular/common";
+import { LogComponent } from './component/log/log.component';
+import { MatTableModule } from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
 
 registerLocaleData(localeEsCL, 'es-CL');
 
@@ -45,7 +48,8 @@ registerLocaleData(localeEsCL, 'es-CL');
     LoginComponent,
     ConfigurationComponent,
     NotificationSidebarComponent,
-    CategoryFormComponent
+    CategoryFormComponent,
+    LogComponent
   ],
     imports: [
         BrowserModule,
@@ -57,13 +61,15 @@ registerLocaleData(localeEsCL, 'es-CL');
         MatDialogModule,
         ToastrModule.forRoot(),
         MatButtonModule,
+        MatTableModule,
         FormsModule,
         MatPaginatorModule,
         MatInputModule,
         MatMenuModule,
         MatProgressSpinnerModule,
         MatIconModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatSortModule
     ],
   providers: [],
   exports: [

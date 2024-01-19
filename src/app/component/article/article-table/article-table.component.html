@@ -1,78 +1,85 @@
-<h1>Artículos y noticias</h1>
-<form [formGroup]="formFilter" (ngSubmit)="refresh()" novalidate>
-    <div class="row border-bottom bg-body mb-2 pb-1 gy-2 gx-3">
-        <div class="col-auto">
-            <select class="form-select-sm" formControlName="category">
-                <option value="">Todas las categorías</option>
-                <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
-            </select>
-            <select class="form-select-sm ms-1" formControlName="principalSite">
-                <option value="">Todos los sitios</option>
-                <option [value]="domain.key" *ngFor="let domain of domains">{{domain.name}}</option>
-            </select>
-            <label class="form-label ms-1" for="inputText">Contiene</label>
-            <input type="text" id="inputText" formControlName="text" autocomplete="off" class="form-control-sm">
-        </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-sm btn-primary me-1">Filtrar</button>
-            <button type="button" class="btn btn-sm btn-secondary me-1" [disabled]="!canUpdateTag()"
-                    (click)="setAsTag()">Crear Tag
-            </button>
-            <button type="button" class="btn btn-sm btn-secondary me-1" (click)="clearFilter()">Limpiar</button>
-        </div>
-        <div class="col-auto text-end">
-            <button type="button" class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()"><i
-                    class="bi bi-plus-square"></i>
-                Añadir nueva
-            </button>
-        </div>
+<h1>Listado de artículos y noticias</h1>
+<p>Visualiza todos los artículos que se han publicado.</p>
+<form [formGroup]="formFilter" (ngSubmit)="refresh()" novalidate class="pt-4 pb-4">
+  <div class="row bg-body mb-2 pb-1 gy-2 gx-3">
+    <div class="col-auto">
+      <select class="form-select-sm" formControlName="category">
+        <option value="">Todas las categorías</option>
+        <option [value]="category.name" *ngFor="let category of categories">{{category.name}}</option>
+      </select>
+      <select class="form-select-sm ms-1" formControlName="principalSite">
+        <option value="">Todos los sitios</option>
+        <option [value]="domain.key" *ngFor="let domain of domains">{{domain.name}}</option>
+      </select>
+      <label class="form-label ms-1" for="inputText">Contiene</label>
+      <input type="text" id="inputText" formControlName="text" autocomplete="off" class="form-control-sm">
     </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-sm btn-primary me-1">Filtrar</button>
+      <button type="button" class="btn btn-sm btn-secondary me-1" [disabled]="!canUpdateTag()"
+              (click)="setAsTag()">Crear Tag
+      </button>
+      <button type="button" class="btn btn-sm btn-secondary me-1" (click)="clearFilter()">Limpiar</button>
+    </div>
+    <div class="col-auto text-end">
+      <button type="button" class="btn btn-sm btn-secondary me-1" (click)="addNewArticle()"><i
+        class="bi bi-plus-square"></i>
+        Añadir nueva
+      </button>
+    </div>
+  </div>
 </form>
-<table class="table table-hover table-bordered">
-    <thead>
-    <tr>
-        <th scope="col" (click)="sort('title')">Titulo</th>
-        <th scope="col">Autor</th>
-        <th scope="col">Dominio</th>
-        <th scope="col">Publicado</th>
-        <th scope="col">Modificado</th>
-        <th scope="col">Estado</th>
-        <th scope="col">Acciones</th>
-    </tr>
-    </thead>
-    <tbody *ngIf="loading">
-    <tr>
-        <td colspan="7" style="background-color: black" class="text-center">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-            <img src="./assets/img/reading-the-paper-newspaper.gif" alt="Cargando..." class="img-fluid">
-        </td>
-    </tr>
-    </tbody>
-    <tbody *ngIf="articles.length > 0 && !loading">
-    <tr *ngFor="let article of articles">
-        <td>{{article.title}}</td>
-        <td>{{article.author ? article.author.name : ''}}</td>
-        <td>{{article.principalSite}}</td>
-        <td class="text-nowrap">{{article.createdAt | date:'dd MMM yyyy hh:mm'}}</td>
-        <td class="text-nowrap">{{article.updatedAt | date: 'dd MMM yyyy hh:mm'}}</td>
-        <td>{{article.status}}</td>
-        <td class="text-nowrap">
-            <button type="button" class="btn btn-link btn-sm" title="Editar" (click)="open(article.id)">
-                <i class="bi bi-pencil-square"></i>
-            </button>
-            <button type="button" class="btn btn-link btn-sm"
-                    *ngIf="article.site"
-                    title="Previsualizar" (click)="show(article)">
-                <i class="bi bi-eye-fill"></i>
-            </button>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<mat-paginator #paginator (page)="handlePageEvent($event)"
-               [length]="pagination.length"
-               [pageSize]="pagination.pageSize"
-               [pageSizeOptions]="pagination.pageSizeOptions"
-               aria-label="Select page">
-</mat-paginator>
-
+<div class="mat-elevation-z8" [style.opacity]="loading ? '1.5' : '1'">
+  <table #table mat-table [dataSource]="articles" matSort (matSortChange)="announceSortChange($event)"
+         class="mat-elevation-z8">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por titulo">Titulo</th>
+      <td mat-cell *matCellDef="let article">{{article.title}}</td>
+    </ng-container>
+    <ng-container matColumnDef="author">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por autor">Escrito por</th>
+      <td mat-cell *matCellDef="let article">{{article.author.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="domain">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sitio">Sitio</th>
+      <td mat-cell *matCellDef="let article">{{article.site?.name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar fecha de publicación">Fecha
+        de publicación
+      </th>
+      <td mat-cell class="text-nowrap" *matCellDef="let article">{{article.createdAt | date:'dd MMM yyyy hh:mm' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="updatedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por fecha de actualización">
+        Fecha de actualización
+      </th>
+      <td mat-cell class="text-nowrap" *matCellDef="let article">{{article.updatedAt | date:'dd MMM yyyy hh:mm'}}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Ordenar por estado">Estado</th>
+      <td mat-cell *matCellDef="let article">{{article.status}}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+      <td mat-cell class="text-nowrap" *matCellDef="let article">
+        <button type="button" class="btn btn-link btn-sm" title="Editar" (click)="open(article.id)">
+          <i class="bi bi-pencil-square"></i>
+        </button>
+        <button type="button" class="btn btn-link btn-sm"
+                *ngIf="article.site"
+                title="Previsualizar" (click)="show(article)">
+          <i class="bi bi-eye-fill"></i>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator #paginator (page)="handlePageEvent($event)"
+                 [length]="pagination.length"
+                 [pageSize]="pagination.pageSize"
+                 [pageSizeOptions]="pagination.pageSizeOptions"
+                 aria-label="Select page">
+  </mat-paginator>
+</div>

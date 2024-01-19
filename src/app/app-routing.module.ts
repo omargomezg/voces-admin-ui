@@ -5,13 +5,15 @@ import {ArticleFormComponent} from "./component/article/article-form/article-for
 import {AuthorTableComponent} from "./component/author/author-table/author-table.component";
 import {AuthGuardService} from "./shared/service";
 import {LoginComponent} from "./component/login/login.component";
+import { LogComponent } from './component/log/log.component';
 
 const routes: Routes = [
   {path: '', component: ArticleTableComponent, canActivate: [AuthGuardService]},
   {path: 'article', component: ArticleTableComponent, canActivate: [AuthGuardService]},
   {path: 'article/create', component: ArticleFormComponent, canActivate: [AuthGuardService]},
   {path: 'article/:id', component: ArticleFormComponent, canActivate: [AuthGuardService]},
-  {path: 'authors', component: AuthorTableComponent, canActivate: [AuthGuardService]},
+  { path: 'authors', component: AuthorTableComponent, canActivate: [AuthGuardService] },
+  {path: 'logs', component: LogComponent, canActivate: [AuthGuardService]},
   {
     path: 'configuration',
     loadChildren: () => import('./modules/configuration/configuration.module').then(m => m.ConfigurationModule),

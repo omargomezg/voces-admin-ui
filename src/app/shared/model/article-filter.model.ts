@@ -4,6 +4,7 @@ export class ArticleFilterModel {
     text: string;
     sortBy: string;
     direction: string;
+
     constructor() {
         this.category = '';
         this.principalSite = '';

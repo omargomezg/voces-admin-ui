@@ -16,6 +16,7 @@ export class SiteListComponent implements OnInit {
     site!: SiteModel;
     domainForm!: FormGroup;
     selectedDomain: string = '';
+    loading: boolean = true;
     reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
 
@@ -98,9 +99,11 @@ export class SiteListComponent implements OnInit {
     }
 
     loadSite(): void {
+      this.loading = true;
         this.siteService.getByDomain(this.selectedDomain).subscribe(site => {
             this.site = site;
             this.buildForm();
+            this.loading = false;
         });
     }
 

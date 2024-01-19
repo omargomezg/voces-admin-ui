@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="col-sm-10" *ngIf="site">
-            <form [formGroup]="domainForm" (ngSubmit)="save()">
+            <form [formGroup]="domainForm" [ngStyle]="{'opacity':loading ?'0.5':''}" (ngSubmit)="save()">
                 <div class="mb-3">
                     <label for="siteName" class="form-label">Nombre del sitio</label>
                     <input type="text" class="form-control" id="siteName"
